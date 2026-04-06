@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LifeLink | Sign In</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="auth-wrapper">
+    <div class="auth-card-container">
+        <div class="auth-visual-side">
+            <img src="images/logo.png" alt="Login">
+        </div>
+        <div class="auth-form-side">
+            <h2 class="logo-text" style="margin-top:0;">Life link</h2>
+            
+            <div style="display:flex; gap:10px; margin: 20px 0 30px;">
+                <button class="btn-filled-small" style="flex:1;">Sign In</button>
+                <button class="btn-outline-small" style="flex:1; border-color:#eee; color:var(--text-black);" onclick="location.href='signup.html'">Sign Up</button>
+            </div>
+
+            <form onsubmit="handleLogin(event)">
+                <div class="input-group">
+                    <label>Email or Phone Number</label>
+                    <input type="text" placeholder="example@mail.com" required>
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-filled-full">Sign In</button>
+                <a href="forgot-password.html" style="display:block; text-align:center; margin-top:15px; color:var(--primary-red); text-decoration:none; font-size:0.85rem; font-weight:600;">Forgot password?</a>
+            </form>
+
+            <div style="text-align:center; margin: 25px 0; position:relative;">
+                <div style="height:1px; background:#eee; width:100%; position:absolute; top:50%; z-index:1;"></div>
+                <span style="background:white; padding:0 15px; position:relative; z-index:2; color:#aaa; font-size:0.85rem;">Or</span>
+            </div>
+            
+            <button class="btn-outline-full" onclick="openRedCrossKeypad()">Login as Red Cross</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="redCrossModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); z-index: 2000; align-items: center; justify-content: center;">
+        
+        <div class="modal-card" id="redCrossInputStep" style="background: white; padding: 40px; border-radius: 20px; max-width: 400px; width: 90%; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+            <div style="font-size: 50px; margin-bottom: 20px;"></div>
+            <h2 style="margin-bottom: 10px; color: var(--text-black);">Institutional Access</h2>
+            <p style="color: var(--text-grey); margin-bottom: 20px; font-size: 0.95rem;">Enter your institutional access code to continue.</p>
+            <input type="password" id="accessCodeInput" placeholder="Enter Code" style="width: 100%; padding: 12px; border: 1.5px solid #eee; border-radius: 8px; margin-bottom: 20px; text-align: center; font-size: 1.2rem;">
+            <button class="btn-filled-full" onclick="verifyRedCrossCode()" style="width: 100%; padding: 12px; border-radius: 8px; font-weight: 700;">Verify Access</button>
+            <button onclick="closeRedCrossModal()" style="background: none; border: none; color: #aaa; margin-top: 15px; cursor: pointer; font-size: 0.9rem;">Cancel</button>
+        </div>
+
+        <div class="modal-card" id="redCrossSuccessStep" style="display: none; background: white; padding: 40px; border-radius: 20px; max-width: 400px; width: 90%; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+            <div style="font-size: 60px; margin-bottom: 20px;"></div>
+            <h2 style="margin: 0 0 10px 0; color: var(--text-black); font-size: 1.8rem;">Access Granted!</h2>
+            <p style="color: var(--text-grey); font-size: 1rem; line-height: 1.5; margin-bottom: 30px;">
+                Institutional Access Granted. Welcome, Red Cross Partner.
+            </p>
+            <button class="btn-filled-full" onclick="window.location.href='index.html'" style="width: 100%; padding: 12px; border-radius: 8px; font-weight: 700;">Continue</button>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

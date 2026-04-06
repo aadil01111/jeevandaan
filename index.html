@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeLink | Save Lives</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo-container" onclick="location.href='index.html'">
+            <img src="images/lifelink.image.jpeg" class="nav-logo-img" alt="LifeLink">
+            <span class="logo-text">Life link</span>
+        </div>
+        <div class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
+        </div>
+        <div class="nav-auth">
+            <button class="btn-outline-small" onclick="location.href='login.html'">Sign In</button>
+            <button class="btn-filled-small" onclick="location.href='signup.html'">Signup</button>
+        </div>
+    </nav>
+
+    <header class="hero" id="home" style="padding: 80px 8%; display: flex; align-items: center; justify-content: space-between; max-width: 1200px; margin: 0 auto; min-height: 60vh;">
+        <div class="hero-content" style="flex: 1; max-width: 600px;">
+            <h1 style="font-size: 3.5rem; line-height: 1.1; margin-bottom: 20px;">Save life through <br><span style="color: var(--primary-red);">Donating Blood</span></h1>
+            <p style="font-size: 1.1rem; color: #aaa; margin-bottom: 35px; line-height: 1.6;">
+                Connect donors with those in need. Life Link makes blood donation simple, efficient, and life-saving.
+            </p>
+            <div style="display: flex; gap: 15px;">
+                <button class="btn-outline-small" style="padding: 12px 30px;" onclick="location.href='login.html'">Sign In</button>
+                <button class="btn-filled-small" style="padding: 12px 30px;" onclick="location.href='signup.html'">Signup</button>
+            </div>
+        </div>
+        <div class="hero-visual" style="flex: 1; display: flex; justify-content: flex-end;">
+            <img src="images/logo.png" alt="LifeLink Illustration" style="width: 100%; max-width: 450px;">
+        </div>
+    </header>
+
+    <section class="features" style="background-color: var(--soft-pink); padding: 80px 8%;">
+        <div style="display: flex; gap: 30px; max-width: 1200px; margin: 0 auto; flex-wrap: wrap;">
+            <div style="background:white; padding:40px 30px; border-radius:15px; flex:1; min-width: 250px; position: relative;">
+                <div style="color: var(--primary-red); font-size: 1.5rem; margin-bottom: 15px;"></div>
+                <h3 style="margin-bottom: 10px;">Register as Donor</h3>
+                <p style="font-size:0.9rem; color:var(--text-grey); line-height: 1.5;">Quick and easy registration process. Share your blood type and availability to help save lives.</p>
+            </div>
+            <div style="background:white; padding:40px 30px; border-radius:15px; flex:1; min-width: 250px;">
+                <div style="color: var(--primary-red); font-size: 1.5rem; margin-bottom: 15px;"></div>
+                <h3 style="margin-bottom: 10px;">Match with Requests</h3>
+                <p style="font-size:0.9rem; color:var(--text-grey); line-height: 1.5;">Get notified when someone nearby needs your blood type. Respond quickly to emergency requests.</p>
+            </div>
+            <div style="background:white; padding:40px 30px; border-radius:15px; flex:1; min-width: 250px;">
+                <div style="color: var(--primary-red); font-size: 1.5rem; margin-bottom: 15px;"></div>
+                <h3 style="margin-bottom: 10px;">Hospital Network</h3>
+                <p style="font-size:0.9rem; color:var(--text-grey); line-height: 1.5;">Connected with trusted hospitals. Seamless coordination between donors, patients, and medical facilities.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" style="padding: 100px 8%; text-align: center; max-width: 1000px; margin: 0 auto;">
+        <h2 style="font-size: 3.5rem; color: var(--primary-red); margin-bottom: 40px; font-weight: 800;">About life link</h2>
+        <p style="line-height: 1.8; color: var(--text-black); font-size: 1.1rem; margin-bottom: 80px;">
+            Life Link is a modern blood donation management platform that connects blood donors with those in need. Our mission is to ensure that no one suffers due to blood shortage by creating an efficient network of donors, hospitals, and patients.
+        </p>
+        
+        <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 40px;">
+            <div style="flex: 1; min-width: 200px;">
+                <h2 style="font-size: 3.5rem; color: var(--primary-red); margin: 0; font-weight: 800;">10,000 +</h2>
+                <p style="color: #aaa; margin-top: 10px; font-weight: 500;">Active Doners</p>
+            </div>
+            <div style="flex: 1; min-width: 200px;">
+                <h2 style="font-size: 3.5rem; color: var(--primary-red); margin: 0; font-weight: 800;">500 +</h2>
+                <p style="color: #aaa; margin-top: 10px; font-weight: 500;">Partner Hospital</p>
+            </div>
+            <div style="flex: 1; min-width: 200px;">
+                <h2 style="font-size: 3.5rem; color: var(--primary-red); margin: 0; font-weight: 800;">1,000 +</h2>
+                <p style="color: #aaa; margin-top: 10px; font-weight: 500;">Lives Saved</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" style="padding: 100px 8%; background-color: var(--soft-pink);">
+        <h2 style="font-size: 3.5rem; color: var(--text-black); text-align: center; margin-bottom: 60px; font-weight: 800;">Contact us</h2>
+        
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: center; gap: 30px; flex-wrap: wrap;">
+            <div style="background: white; padding: 50px 30px; border-radius: 15px; width: 320px; text-align: center;">
+                <div style="color: var(--primary-red); font-size: 2rem; margin-bottom: 20px;"></div>
+                <h3 style="margin-bottom: 15px;">Phone</h3>
+                <p style="color: var(--text-grey); font-size: 0.95rem;">+1 (555) 123-4567</p>
+            </div>
+            
+            <div style="background: white; padding: 50px 30px; border-radius: 15px; width: 320px; text-align: center;">
+                <div style="color: var(--primary-red); font-size: 2rem; margin-bottom: 20px;"></div>
+                <h3 style="margin-bottom: 15px;">Email</h3>
+                <p style="color: var(--text-grey); font-size: 0.95rem;">info@lifelink.com</p>
+            </div>
+            
+            <div style="background: white; padding: 50px 30px; border-radius: 15px; width: 320px; text-align: center;">
+                <div style="color: var(--primary-red); font-size: 2rem; margin-bottom: 20px;"></div>
+                <h3 style="margin-bottom: 15px;">Address</h3>
+                <p style="color: var(--text-grey); font-size: 0.95rem;">Medical Center, Kathmandu</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer" style="background: var(--footer-bg); color: white; padding: 80px 8% 40px;">
+        <div style="display: flex; justify-content: space-between; max-width: 1200px; margin: 0 auto; flex-wrap: wrap; gap: 60px;">
+            <div style="flex: 1; min-width: 250px;">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+                    <span style="color: var(--primary-red); font-size: 1.5rem;">🩸</span>
+                    <h3 style="margin: 0; font-size: 1.8rem;">Life link</h3>
+                </div>
+                <p style="font-size:1rem; color:#ccc; line-height: 1.6;">Connecting donors with those in need. Save lives through blood donation.</p>
+            </div>
+            
+            <div style="flex: 0.5; min-width: 150px;">
+                <h3 style="margin-bottom: 25px;">Quick Links</h3>
+                <a href="#home" style="color:#ccc; text-decoration:none; display:block; margin-bottom:12px;">Home</a>
+                <a href="#about" style="color:#ccc; text-decoration:none; display:block; margin-bottom:12px;">About</a>
+                <a href="signup.html" style="color:#ccc; text-decoration:none; display:block; margin-bottom:12px;">Register</a>
+            </div>
+            
+            <div style="flex: 0.5; min-width: 150px;">
+                <h3 style="margin-bottom: 25px;">For institutions</h3>
+                <a href="#" style="color:#ccc; text-decoration:none; display:block; margin-bottom:12px;">Hospital login</a>
+                <a href="#" style="color:#ccc; text-decoration:none; display:block; margin-bottom:12px;">Admin login</a>
+            </div>
+            
+            <div style="flex: 1; min-width: 200px;">
+                <h3 style="margin-bottom: 25px;">Contact Info</h3>
+                <p style="font-size:1rem; color:#ccc; margin-bottom:12px;">9808990897</p>
+                <p style="font-size:1rem; color:#ccc; margin-bottom:12px;">info@lifelink.com</p>
+                <p style="font-size:1rem; color:#ccc;">Available 24/7</p>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 80px; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.9rem; color: #888;">
+            © 2026 Life Link. All rights reserved. Saving lives together.
+        </div>
+    </footer>
+    <script src="js/script.js"></script>
+</body>
+</html>
