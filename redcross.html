@@ -61,6 +61,8 @@
 
 
 <main class="main">
+
+  <!-- DASHBOARD -->
   <section class="page active" id="page-dashboard">
     <h1 class="page-title">Dashboard Overview</h1>
     <div class="stat-cards">
@@ -110,6 +112,7 @@
     </div>
   </section>
 
+  <!-- APPOINTMENTS -->
   <section class="page" id="page-appointments">
     <h1 class="page-title">Appointments</h1>
     <div class="card table-card">
@@ -122,16 +125,28 @@
             <td>John Doe</td><td>B+</td><td>2026-04-05</td><td>2025-12-01</td>
             <td><span class="badge badge-green">Scheduled</span></td>
             <td>
-              <button class="icon-btn" title="Edit" onclick="openEdit('appointments','a1',this)">✏️</button>
-              <button class="icon-btn" title="Delete" onclick="openDelete('a1','tbl-appointments')">🗑️</button>
+              <button class="action-btn btn-edit" title="Edit" onclick="openEdit('appointments','a1',this)">
+                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                Edit
+              </button>
+              <button class="action-btn btn-delete" title="Delete" onclick="openDelete('a1','tbl-appointments')">
+                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                Delete
+              </button>
             </td>
           </tr>
           <tr data-id="a2">
             <td>John Doe</td><td>B+</td><td>2026-04-05</td><td>2025-12-01</td>
             <td><span class="badge badge-red">Pending</span></td>
             <td>
-              <button class="icon-btn" title="Edit" onclick="openEdit('appointments','a2',this)">✏️</button>
-              <button class="icon-btn" title="Delete" onclick="openDelete('a2','tbl-appointments')">🗑️</button>
+              <button class="action-btn btn-edit" title="Edit" onclick="openEdit('appointments','a2',this)">
+                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                Edit
+              </button>
+              <button class="action-btn btn-delete" title="Delete" onclick="openDelete('a2','tbl-appointments')">
+                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                Delete
+              </button>
             </td>
           </tr>
         </tbody>
@@ -139,6 +154,7 @@
     </div>
   </section>
 
+  <!-- BLOOD TESTING -->
   <section class="page" id="page-bloodtesting">
     <h1 class="page-title">Blood Testing</h1>
     <div class="card table-card">
@@ -150,15 +166,27 @@
           <tr data-id="bt1">
             <td>John Doe</td><td>A+</td><td>A+</td><td>Negative</td><td>Negative</td><td>14.5 g/dL</td>
             <td>
-              <button class="btn-accept" onclick="testingAction('bt1','Accepted')">Accept</button>
-              <button class="btn-reject" onclick="testingAction('bt1','Rejected')">Reject</button>
+              <button class="action-btn btn-accept" onclick="testingAction('bt1','Accepted')">
+                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                Accept
+              </button>
+              <button class="action-btn btn-reject" onclick="testingAction('bt1','Rejected')">
+                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                Reject
+              </button>
             </td>
           </tr>
           <tr data-id="bt2">
             <td>Jane Smith</td><td>O+</td><td>O+</td><td>Negative</td><td>Negative</td><td>13.2 g/dL</td>
             <td>
-              <button class="btn-accept" onclick="testingAction('bt2','Accepted')">Accept</button>
-              <button class="btn-reject" onclick="testingAction('bt2','Rejected')">Reject</button>
+              <button class="action-btn btn-accept" onclick="testingAction('bt2','Accepted')">
+                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                Accept
+              </button>
+              <button class="action-btn btn-reject" onclick="testingAction('bt2','Rejected')">
+                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                Reject
+              </button>
             </td>
           </tr>
         </tbody>
@@ -166,6 +194,7 @@
     </div>
   </section>
 
+  <!-- INVENTORY -->
   <section class="page" id="page-inventory">
     <h1 class="page-title">Inventory</h1>
     <div class="card table-card">
@@ -177,15 +206,27 @@
           <tr data-id="inv1">
             <td>A+</td><td>45</td><td>2026-04-05</td><td>2025-12-01</td>
             <td>
-              <button class="btn-accept" onclick="openAdd('inv1')">Add</button>
-              <button class="btn-reject" onclick="openEdit('inventory','inv1',this)">Update</button>
+              <button class="action-btn btn-accept" onclick="openAdd('inv1')">
+                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                Add
+              </button>
+              <button class="action-btn btn-edit" onclick="openEdit('inventory','inv1',this)">
+                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                Update
+              </button>
             </td>
           </tr>
           <tr data-id="inv2">
             <td>B-</td><td>60</td><td>2026-04-05</td><td>2025-12-01</td>
             <td>
-              <button class="btn-accept" onclick="openAdd('inv2')">Add</button>
-              <button class="btn-reject" onclick="openEdit('inventory','inv2',this)">Update</button>
+              <button class="action-btn btn-accept" onclick="openAdd('inv2')">
+                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                Add
+              </button>
+              <button class="action-btn btn-edit" onclick="openEdit('inventory','inv2',this)">
+                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                Update
+              </button>
             </td>
           </tr>
         </tbody>
@@ -193,7 +234,7 @@
     </div>
   </section>
 
-
+  <!-- BLOOD REQUEST -->
   <section class="page" id="page-bloodrequest">
     <h1 class="page-title">Blood Request</h1>
     <div class="card table-card">
@@ -206,16 +247,28 @@
             <td>John Doe</td><td>B+</td><td>2</td>
             <td><span class="badge badge-yellow">Pending</span></td>
             <td>
-              <button class="btn-accept" onclick="requestAction('br1','Approved')">Approve</button>
-              <button class="btn-reject" onclick="openAssign('br1')">Assign</button>
+              <button class="action-btn btn-approve" onclick="requestAction('br1','Approved')">
+                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                Approve
+              </button>
+              <button class="action-btn btn-assign" onclick="openAssign('br1')">
+                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                Assign
+              </button>
             </td>
           </tr>
           <tr data-id="br2">
             <td>Jane Smith</td><td>O+</td><td>3</td>
             <td><span class="badge badge-yellow">Pending</span></td>
             <td>
-              <button class="btn-accept" onclick="requestAction('br2','Approved')">Approve</button>
-              <button class="btn-reject" onclick="openAssign('br2')">Assign</button>
+              <button class="action-btn btn-approve" onclick="requestAction('br2','Approved')">
+                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                Approve
+              </button>
+              <button class="action-btn btn-assign" onclick="openAssign('br2')">
+                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                Assign
+              </button>
             </td>
           </tr>
         </tbody>
@@ -223,6 +276,7 @@
     </div>
   </section>
 
+  <!-- RARE BLOOD -->
   <section class="page" id="page-rareblood">
     <h1 class="page-title">Rare Blood Registry</h1>
     <div class="card table-card">
@@ -244,7 +298,7 @@
     </div>
   </section>
 
-  
+  <!-- EXPIRE MONITORING -->
   <section class="page" id="page-expire">
     <h1 class="page-title">Blood Expiry Monitoring</h1>
     <div class="card table-card">
@@ -256,18 +310,29 @@
           <tr data-id="ex1">
             <td>A+</td><td>3</td><td>2026-04-08</td>
             <td><span class="days-left-warning">6 Days</span></td>
-            <td><button class="btn-remove-expiry" onclick="removeExpiry('ex1','tbl-expire')">Remove Expiry</button></td>
+            <td>
+              <button class="action-btn btn-expiry" onclick="removeExpiry('ex1','tbl-expire')">
+                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Remove Expiry
+              </button>
+            </td>
           </tr>
           <tr data-id="ex2">
             <td>O-</td><td>5</td><td>2026-04-15</td>
             <td><span class="days-left-warning">13 Days</span></td>
-            <td><button class="btn-remove-expiry" onclick="removeExpiry('ex2','tbl-expire')">Remove Expiry</button></td>
+            <td>
+              <button class="action-btn btn-expiry" onclick="removeExpiry('ex2','tbl-expire')">
+                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Remove Expiry
+              </button>
+            </td>
           </tr>
         </tbody>
       </table>
     </div>
   </section>
 
+  <!-- DONORS -->
   <section class="page" id="page-donors">
     <h1 class="page-title">Donor Records</h1>
     <div class="card table-card">
@@ -279,12 +344,22 @@
           <tr data-id="dn1">
             <td>John Doe</td><td>A-</td><td>3</td><td>2026-04-08</td>
             <td><span class="badge badge-green">Eligible</span></td>
-            <td><button class="btn-view-history" onclick="viewHistory('dn1')">View History</button></td>
+            <td>
+              <button class="action-btn btn-history" onclick="viewHistory('dn1')">
+                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+                View History
+              </button>
+            </td>
           </tr>
           <tr data-id="dn2">
             <td>Jane Smith</td><td>A-</td><td>3</td><td>2026-04-08</td>
             <td><span class="badge badge-red">Not Eligible</span></td>
-            <td><button class="btn-view-history" onclick="viewHistory('dn2')">View History</button></td>
+            <td>
+              <button class="action-btn btn-history" onclick="viewHistory('dn2')">
+                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+                View History
+              </button>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -294,88 +369,142 @@
 </main>
 
 
+<!-- EDIT MODAL -->
 <div class="modal-overlay" id="edit-modal">
   <div class="modal">
-    <button class="modal-close" onclick="closeModal('edit-modal')">&#x2715;</button>
-    <h3 id="edit-modal-title">Edit Record</h3>
-    <div id="edit-modal-fields"></div>
-    <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeModal('edit-modal')">Cancel</button>
-      <button class="btn-save" onclick="saveEdit()">Save Changes</button>
+    <div class="modal-top">
+      <div class="modal-icon-wrap edit">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      </div>
+      <div class="modal-title-block">
+        <div class="modal-title" id="edit-modal-title">Edit Record</div>
+        <div class="modal-subtitle">Update the details below</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('edit-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div id="edit-modal-fields"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="foot-btn foot-cancel" onclick="closeModal('edit-modal')">Cancel</button>
+      <button class="foot-btn foot-save" onclick="saveEdit()">Save Changes</button>
     </div>
   </div>
 </div>
 
+<!-- DELETE MODAL -->
 <div class="modal-overlay" id="delete-modal">
-  <div class="confirm-modal">
-    <h3>Confirm Delete</h3>
-    <p>Are you sure you want to delete this record? This cannot be undone.</p>
-    <div>
-      <button class="btn-cancel" onclick="closeModal('delete-modal')">Cancel</button>
-      <button class="danger-btn" onclick="confirmDelete()">Delete</button>
+  <div class="modal modal-sm">
+    <div class="modal-top" style="border-bottom:none;padding-bottom:0;">
+      <div style="flex:1"></div>
+      <button class="modal-close" onclick="closeModal('delete-modal')">✕</button>
+    </div>
+    <div class="confirm-body">
+      <div class="confirm-ring">
+        <svg width="28" height="28" fill="none" stroke="#be123c" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+      </div>
+      <div class="confirm-h">Delete this record?</div>
+      <div class="confirm-p">This action is permanent and cannot be undone. The record will be removed from the system.</div>
+    </div>
+    <div class="confirm-footer">
+      <button class="foot-btn foot-delete-cancel" onclick="closeModal('delete-modal')">Cancel</button>
+      <button class="foot-btn foot-danger" onclick="confirmDelete()">Yes, Delete</button>
     </div>
   </div>
 </div>
 
+<!-- ADD MODAL -->
 <div class="modal-overlay" id="add-modal">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal('add-modal')">&#x2715;</button>
-    <h3>Add Units</h3>
-    <div class="form-group">
-      <label>Units to Add</label>
-      <input type="number" id="add-units-input" min="1" value="1"/>
+  <div class="modal modal-sm">
+    <div class="modal-top">
+      <div class="modal-icon-wrap add">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+      </div>
+      <div class="modal-title-block">
+        <div class="modal-title">Add Blood Units</div>
+        <div class="modal-subtitle">Increase inventory stock</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('add-modal')">✕</button>
     </div>
-    <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeModal('add-modal')">Cancel</button>
-      <button class="btn-save" onclick="confirmAdd()">Add</button>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Units to Add</label>
+        <div class="units-wrap">
+          <button class="units-btn" onclick="adjUnits(-1)">−</button>
+          <input class="units-val" id="add-units-input" type="number" min="1" value="1"/>
+          <button class="units-btn" onclick="adjUnits(1)">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="foot-btn foot-cancel" onclick="closeModal('add-modal')">Cancel</button>
+      <button class="foot-btn foot-add" onclick="confirmAdd()">Add Units</button>
     </div>
   </div>
 </div>
 
-
+<!-- ASSIGN MODAL -->
 <div class="modal-overlay" id="assign-modal">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal('assign-modal')">&#x2715;</button>
-    <h3>Assign Donor</h3>
-    <div class="form-group">
-      <label>Donor Name</label>
-      <input type="text" id="assign-donor-input" placeholder="Enter donor name"/>
+  <div class="modal modal-sm">
+    <div class="modal-top">
+      <div class="modal-icon-wrap assign">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      </div>
+      <div class="modal-title-block">
+        <div class="modal-title">Assign Donor</div>
+        <div class="modal-subtitle">Link a donor to this blood request</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('assign-modal')">✕</button>
     </div>
-    <div class="form-group">
-      <label>Notes</label>
-      <input type="text" id="assign-notes-input" placeholder="Optional notes"/>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Donor Name</label>
+        <input type="text" class="form-input" id="assign-donor-input" placeholder="e.g. John Doe"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Notes (optional)</label>
+        <input type="text" class="form-input" id="assign-notes-input" placeholder="Any additional notes…"/>
+      </div>
     </div>
-    <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeModal('assign-modal')">Cancel</button>
-      <button class="btn-save" onclick="confirmAssign()">Assign</button>
+    <div class="modal-footer">
+      <button class="foot-btn foot-cancel" onclick="closeModal('assign-modal')">Cancel</button>
+      <button class="foot-btn foot-assign" onclick="confirmAssign()">Assign Donor</button>
     </div>
   </div>
 </div>
 
-
+<!-- HISTORY MODAL -->
 <div class="modal-overlay" id="history-modal">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal('history-modal')">&#x2715;</button>
-    <h3 id="history-modal-title">Donation History</h3>
-    <div class="history-list" id="history-list"></div>
-    <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeModal('history-modal')">Close</button>
+  <div class="modal modal-sm">
+    <div class="modal-top">
+      <div class="modal-icon-wrap history">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+      </div>
+      <div class="modal-title-block">
+        <div class="modal-title" id="history-modal-title">Donation History</div>
+        <div class="modal-subtitle">All recorded donations</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('history-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="history-list" id="history-list"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="foot-btn foot-cancel" onclick="closeModal('history-modal')">Close</button>
     </div>
   </div>
 </div>
 
-
+<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script>
-
 function showPage(pageId, el) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById('page-' + pageId).classList.add('active');
   el.classList.add('active');
 }
-
 
 function showToast(msg) {
   const t = document.getElementById('toast');
@@ -384,13 +513,11 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 2600);
 }
 
-
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
 document.querySelectorAll('.modal-overlay').forEach(o => {
   o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); });
 });
-
 
 const editConfig = {
   appointments: [
@@ -427,9 +554,10 @@ function openEdit(type, rowId, btn) {
     const val = f.isBadge ? cell.querySelector('.badge').textContent.trim() : cell.textContent.trim();
     const div = document.createElement('div');
     div.className = 'form-group';
-    div.innerHTML = `<label>${f.label}</label>`;
+    div.innerHTML = `<label class="form-label">${f.label}</label>`;
     if (f.type === 'select') {
       const sel = document.createElement('select');
+      sel.className = 'form-select';
       sel.dataset.col = f.col;
       sel.dataset.isBadge = f.isBadge || false;
       f.options.forEach(o => {
@@ -440,7 +568,7 @@ function openEdit(type, rowId, btn) {
       });
       div.appendChild(sel);
     } else {
-      div.innerHTML += `<input type="${f.type}" data-col="${f.col}" value="${val}" />`;
+      div.innerHTML += `<input class="form-input" type="${f.type}" data-col="${f.col}" value="${val}" />`;
     }
     container.appendChild(div);
   });
@@ -468,7 +596,6 @@ function saveEdit() {
   showToast('Record updated successfully.');
 }
 
-
 let _deleteCtx = null;
 
 function openDelete(rowId, tableId) {
@@ -486,12 +613,9 @@ function confirmDelete() {
   _deleteCtx = null;
 }
 
-
 function testingAction(rowId, action) {
   const row = document.querySelector(`#tbl-bloodtesting tr[data-id="${rowId}"]`);
   if (!row) return;
-  const btns = row.querySelectorAll('button');
-  btns.forEach(b => { b.disabled = true; b.style.opacity = '0.5'; });
   const td = row.querySelector('td:last-child');
   const badge = document.createElement('span');
   badge.className = 'badge ' + (action === 'Accepted' ? 'badge-green' : 'badge-red');
@@ -501,7 +625,6 @@ function testingAction(rowId, action) {
   showToast('Sample ' + action.toLowerCase() + '.');
 }
 
-
 function requestAction(rowId, status) {
   const row = document.querySelector(`#tbl-bloodrequest tr[data-id="${rowId}"]`);
   if (!row) return;
@@ -510,7 +633,6 @@ function requestAction(rowId, status) {
   badge.className = 'badge ' + (status === 'Approved' ? 'badge-green' : 'badge-red');
   showToast('Request ' + status.toLowerCase() + '.');
 }
-
 
 let _assignRowId = null;
 function openAssign(rowId) {
@@ -527,12 +649,15 @@ function confirmAssign() {
   _assignRowId = null;
 }
 
-
 let _addRowId = null;
 function openAdd(rowId) {
   _addRowId = rowId;
   document.getElementById('add-units-input').value = 1;
   document.getElementById('add-modal').classList.add('open');
+}
+function adjUnits(d) {
+  const i = document.getElementById('add-units-input');
+  i.value = Math.max(1, (parseInt(i.value) || 1) + d);
 }
 function confirmAdd() {
   const n = parseInt(document.getElementById('add-units-input').value);
@@ -547,7 +672,6 @@ function confirmAdd() {
   _addRowId = null;
 }
 
-
 function removeExpiry(rowId, tableId) {
   const tbl = document.getElementById(tableId);
   const row = tbl.querySelector(`tr[data-id="${rowId}"]`);
@@ -555,19 +679,24 @@ function removeExpiry(rowId, tableId) {
   showToast('Expiry record removed.');
 }
 
-
 const donorHistory = {
   dn1: [
-    { date: '2026-04-08', units: 1, type: 'A-' },
-    { date: '2025-10-12', units: 1, type: 'A-' },
-    { date: '2025-04-20', units: 1, type: 'A-' },
+    { date: 'Apr 08, 2026', units: 1, type: 'A-' },
+    { date: 'Oct 12, 2025', units: 1, type: 'A-' },
+    { date: 'Apr 20, 2025', units: 1, type: 'A-' },
   ],
   dn2: [
-    { date: '2026-04-08', units: 1, type: 'A-' },
-    { date: '2025-08-05', units: 1, type: 'A-' },
-    { date: '2024-12-01', units: 1, type: 'A-' },
+    { date: 'Apr 08, 2026', units: 1, type: 'A-' },
+    { date: 'Aug 05, 2025', units: 1, type: 'A-' },
+    { date: 'Dec 01, 2024', units: 1, type: 'A-' },
   ],
 };
+
+const historyLineColors = [
+  'linear-gradient(180deg,#7c3aed,#a78bfa)',
+  'linear-gradient(180deg,#a78bfa,#c4b5fd)',
+  'linear-gradient(180deg,#c4b5fd,#e9d5ff)',
+];
 
 function viewHistory(donorId) {
   const row = document.querySelector(`#tbl-donors tr[data-id="${donorId}"]`);
@@ -577,12 +706,17 @@ function viewHistory(donorId) {
   list.innerHTML = '';
   const records = donorHistory[donorId] || [];
   if (records.length === 0) {
-    list.innerHTML = '<p style="color:#aaa;text-align:center;padding:18px 0">No history found.</p>';
+    list.innerHTML = '<p style="color:#a78bfa;text-align:center;padding:18px 0">No history found.</p>';
   } else {
-    records.forEach(r => {
+    records.forEach((r, i) => {
       const div = document.createElement('div');
-      div.className = 'history-row';
-      div.innerHTML = `<span>${r.date}</span><span>Blood Group: ${r.type}</span><span>${r.units} Unit</span>`;
+      div.className = 'history-item';
+      div.innerHTML = `
+        <div class="h-line" style="background:${historyLineColors[i] || historyLineColors[2]}"></div>
+        <div class="h-date">${r.date}</div>
+        <div class="h-type">${r.type} Blood</div>
+        <span class="h-badge">${r.units} unit</span>
+      `;
       list.appendChild(div);
     });
   }
