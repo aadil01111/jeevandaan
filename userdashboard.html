@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Life Link – Dashboard</title>
+  <title>Life Link – User Dashboard</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
 
@@ -58,17 +58,26 @@
     }
 
     .logo-icon {
-      width: 30px;
-      height: 30px;
-      background: var(--red);
+      width: 30px; height: 30px;
+      background: var(--white);
+      border: 2px solid var(--red);
       border-radius: 50% 50% 50% 0;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
+      position: relative;
     }
 
-    .logo-icon svg { width: 15px; height: 15px; fill: var(--white); }
+    .logo-icon .blood-drop { width: 14px; height: 14px; fill: var(--red); }
+    .logo-icon .plus-dot {
+      position: absolute; top: -5px; right: -5px;
+      width: 12px; height: 12px;
+      background: var(--red); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 9px; font-weight: 900; color: #fff;
+      border: 1.5px solid #fff;
+    }
 
     .nav-item {
       display: flex;
@@ -116,22 +125,13 @@
       margin-bottom: 18px;
     }
 
-    .profile-top {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 16px;
-    }
+    .profile-top { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
 
     .avatar {
-      width: 50px;
-      height: 50px;
+      width: 50px; height: 50px;
       border-radius: 50%;
       border: 2px solid rgba(255,255,255,0.5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
     }
 
     .avatar svg { width: 28px; height: 28px; stroke: var(--white); fill: none; }
@@ -140,24 +140,14 @@
 
     .stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
 
-    .stat-box {
-      background: rgba(255,255,255,0.18);
-      border-radius: 8px;
-      padding: 10px 14px;
-    }
-
+    .stat-box { background: rgba(255,255,255,0.18); border-radius: 8px; padding: 10px 14px; }
     .stat-label { font-size: 11px; opacity: 0.8; margin-bottom: 5px; }
     .stat-value { font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 5px; }
 
     .verified-icon {
-      width: 15px;
-      height: 15px;
-      background: var(--white);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
+      width: 15px; height: 15px;
+      background: var(--white); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
     }
 
     .verified-icon svg { width: 9px; height: 9px; stroke: var(--red); fill: none; }
@@ -166,29 +156,20 @@
     .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px; }
 
     .action-btn {
-      border-radius: 12px;
-      padding: 28px 16px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
-      border: 2px solid transparent;
-      transition: all 0.2s ease;
-      font-family: inherit;
-      background: none;
+      border-radius: 12px; padding: 28px 16px;
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+      cursor: pointer; border: 2px solid transparent;
+      transition: all 0.2s ease; font-family: inherit; background: none;
     }
 
     .action-btn.inactive { background: var(--white); border-color: var(--border); }
     .action-btn.inactive svg { stroke: var(--text); fill: none; }
     .action-btn.inactive .btn-label { font-size: 15px; font-weight: 600; color: var(--text); }
     .action-btn.inactive .btn-sub { font-size: 12px; color: var(--gray); text-align: center; line-height: 1.4; }
-
     .action-btn.active-red { background: var(--red); border-color: var(--red); }
     .action-btn.active-red svg { stroke: var(--white); fill: none; }
     .action-btn.active-red .btn-label { font-size: 15px; font-weight: 700; color: var(--white); }
     .action-btn.active-red .btn-sub { font-size: 12px; color: rgba(255,255,255,0.75); text-align: center; line-height: 1.4; }
-
     .action-btn svg { width: 32px; height: 32px; }
     .action-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.1); }
 
@@ -200,22 +181,14 @@
       margin-bottom: 18px;
       display: none;
     }
-
     .form-card.visible { display: block; }
     .form-title { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 16px; }
-
     .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
-
     .form-group { display: flex; flex-direction: column; gap: 5px; }
-
     label { font-size: 12px; color: var(--gray); font-weight: 500; }
-
     .field-hint { font-size: 11px; color: #9ca3af; margin-top: 2px; }
 
-    select,
-    input[type="date"],
-    input[type="text"],
-    input[type="number"] {
+    select, input[type="date"], input[type="text"], input[type="number"], input[type="tel"] {
       border: 1.5px solid var(--border);
       border-radius: 8px;
       padding: 9px 12px;
@@ -230,21 +203,17 @@
     }
 
     select {
-      appearance: none;
-      -webkit-appearance: none;
+      appearance: none; -webkit-appearance: none;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
       background-repeat: no-repeat;
       background-position: right 10px center;
       padding-right: 32px;
     }
 
-    select:focus,
-    input[type="date"]:focus,
-    input[type="text"]:focus,
-    input[type="number"]:focus { border-color: var(--red); }
+    select:focus, input[type="date"]:focus, input[type="text"]:focus,
+    input[type="number"]:focus, input[type="tel"]:focus { border-color: var(--red); }
 
     input.input-error { border-color: #ef4444 !important; }
-
     .form-group { position: relative; }
 
     .error-msg {
@@ -268,10 +237,8 @@
     .error-msg::before {
       content: '';
       position: absolute;
-      top: -7px;
-      left: 18px;
-      width: 11px;
-      height: 11px;
+      top: -7px; left: 18px;
+      width: 11px; height: 11px;
       background: #fff1f1;
       border-left: 1.5px solid #fca5a5;
       border-top: 1.5px solid #fca5a5;
@@ -282,17 +249,10 @@
 
     .err-icon {
       display: inline-block;
-      width: 14px;
-      height: 14px;
-      background: #b91c1c;
-      color: #fff;
-      border-radius: 50%;
-      font-size: 9px;
-      font-weight: 700;
-      text-align: center;
-      line-height: 14px;
-      margin-right: 4px;
-      vertical-align: middle;
+      width: 14px; height: 14px;
+      background: #b91c1c; color: #fff;
+      border-radius: 50%; font-size: 9px; font-weight: 700;
+      text-align: center; line-height: 14px; margin-right: 4px; vertical-align: middle;
     }
 
     @keyframes bubblePop {
@@ -303,16 +263,12 @@
     .submit-btn {
       background: var(--red);
       color: var(--white);
-      border: none;
-      border-radius: 8px;
+      border: none; border-radius: 8px;
       padding: 10px 26px;
-      font-size: 14px;
-      font-weight: 600;
-      font-family: inherit;
-      cursor: pointer;
+      font-size: 14px; font-weight: 600;
+      font-family: inherit; cursor: pointer;
       transition: background 0.15s ease;
     }
-
     .submit-btn:hover { background: var(--red-dark); }
 
     select.urgency-normal  { border-color: #16a34a; color: #15803d; background-color: #f0fdf4; font-weight: 600; }
@@ -320,36 +276,24 @@
     select.urgency-critical  { border-color: #7f1d1d; color: #7f1d1d; background-color: #fef2f2; font-weight: 700; }
 
     .urgency-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 11px;
-      font-weight: 600;
-      padding: 3px 9px;
-      border-radius: 20px;
-      margin-top: 4px;
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 11px; font-weight: 600;
+      padding: 3px 9px; border-radius: 20px; margin-top: 4px;
     }
 
     .urgency-badge.normal   { background: #dcfce7; color: #15803d; }
     .urgency-badge.emergency { background: #fee2e2; color: #b91c1c; }
     .urgency-badge.critical  { background: #7f1d1d; color: #fff; }
-    .toast {
-      position: fixed;
-      bottom: 28px;
-      right: 28px;
-      background: #1a1a1a;
-      color: #fff;
-      padding: 12px 20px;
-      border-radius: 10px;
-      font-size: 14px;
-      font-weight: 500;
-      opacity: 0;
-      transform: translateY(8px);
-      transition: all 0.3s ease;
-      pointer-events: none;
-      z-index: 999;
-    }
 
+    /* ── Toast ── */
+    .toast {
+      position: fixed; bottom: 28px; right: 28px;
+      background: #1a1a1a; color: #fff;
+      padding: 12px 20px; border-radius: 10px;
+      font-size: 14px; font-weight: 500;
+      opacity: 0; transform: translateY(8px);
+      transition: all 0.3s ease; pointer-events: none; z-index: 999;
+    }
     .toast.show { opacity: 1; transform: translateY(0); }
     .toast.success { background: #166534; }
     .toast.error { background: #991b1b; }
@@ -362,22 +306,16 @@
     }
 
     .nearby-title {
-      font-size: 15px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--text);
-      margin-bottom: 14px;
+      font-size: 15px; font-weight: 700;
+      display: flex; align-items: center; gap: 8px;
+      color: var(--text); margin-bottom: 14px;
     }
 
     .nearby-title svg { width: 18px; height: 18px; stroke: var(--red); fill: none; }
 
     .center-item {
-      background: var(--gray-light);
-      border-radius: 10px;
-      padding: 12px 14px;
-      margin-bottom: 10px;
+      background: var(--gray-light); border-radius: 10px;
+      padding: 12px 14px; margin-bottom: 10px;
       border: 1px solid var(--border);
     }
 
@@ -385,19 +323,183 @@
     .center-name { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
 
     .center-info {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 12px;
-      color: var(--gray);
-      margin-top: 4px;
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--gray); margin-top: 4px;
     }
 
     .center-info svg { width: 12px; height: 12px; stroke: var(--gray); fill: none; flex-shrink: 0; }
     .center-info a { color: var(--red); text-decoration: none; font-weight: 500; }
     .center-info a:hover { text-decoration: underline; }
 
-    /* ── Responsive ── */
+    /* ════════════════════════════════════
+       RARE BLOOD POPUP MODAL
+    ════════════════════════════════════ */
+    .rare-modal-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(30, 3, 3, 0.55);
+      backdrop-filter: blur(4px);
+      z-index: 500;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .rare-modal-overlay.open { display: flex; }
+
+    .rare-modal {
+      background: #fff;
+      border-radius: 20px;
+      width: 420px;
+      max-width: 95vw;
+      box-shadow: 0 32px 80px rgba(180, 10, 10, 0.22);
+      overflow: hidden;
+      animation: rareModalIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes rareModalIn {
+      0%   { opacity: 0; transform: scale(0.88) translateY(20px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .rare-modal-header {
+      background: linear-gradient(135deg, #7a1208, #C0392B);
+      padding: 22px 24px 18px;
+      color: #fff;
+      position: relative;
+    }
+
+    .rare-modal-icon {
+      width: 48px; height: 48px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 12px;
+    }
+
+    .rare-modal-icon svg { width: 26px; height: 26px; stroke: #fff; fill: none; }
+
+    .rare-modal-close {
+      position: absolute; top: 14px; right: 16px;
+      background: rgba(255,255,255,0.15);
+      border: none; border-radius: 8px;
+      width: 30px; height: 30px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: #fff; font-size: 15px;
+      transition: background 0.15s;
+    }
+
+    .rare-modal-close:hover { background: rgba(255,255,255,0.25); }
+
+    .rare-modal-title { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+    .rare-modal-sub { font-size: 13px; opacity: 0.8; line-height: 1.5; }
+
+    .rare-blood-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 99px;
+      padding: 4px 12px;
+      font-size: 12px; font-weight: 700;
+      color: #fff; margin-bottom: 10px;
+    }
+
+    .rare-blood-badge svg { width: 12px; height: 12px; stroke: #fff; fill: none; }
+
+    .rare-modal-body { padding: 22px 24px; }
+
+    .rare-info-box {
+      background: linear-gradient(135deg, #fef9f9, #fdecea);
+      border: 1.5px solid #f0c8c2;
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 18px;
+      display: flex; align-items: flex-start; gap: 12px;
+    }
+
+    .rare-info-icon {
+      width: 32px; height: 32px;
+      background: #fde8e6;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .rare-info-icon svg { width: 16px; height: 16px; stroke: var(--red); fill: none; }
+
+    .rare-info-text { font-size: 13px; color: #5a2a24; line-height: 1.55; }
+    .rare-info-text strong { color: var(--red); font-weight: 600; }
+
+    .rare-form-group { margin-bottom: 14px; }
+    .rare-form-label { font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 6px; display: block; }
+
+    .rare-input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text);
+      background: #fafafa;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .rare-input:focus {
+      border-color: var(--red);
+      box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.1);
+      background: #fff;
+    }
+
+    .rare-input.phone { letter-spacing: 0.05em; }
+
+    .rare-modal-footer {
+      display: flex; gap: 10px; justify-content: flex-end;
+      padding: 0 24px 22px;
+    }
+
+    .rare-btn-cancel {
+      padding: 10px 20px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      background: #fff; color: var(--gray);
+      font-size: 14px; font-weight: 500;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer; transition: all 0.15s;
+    }
+
+    .rare-btn-cancel:hover { background: var(--gray-mid); }
+
+    .rare-btn-submit {
+      padding: 10px 24px;
+      border-radius: 10px;
+      border: none;
+      background: linear-gradient(135deg, #b71c1c, #D32F2F);
+      color: #fff;
+      font-size: 14px; font-weight: 600;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer; transition: all 0.15s;
+      box-shadow: 0 4px 12px rgba(211, 47, 47, 0.3);
+    }
+
+    .rare-btn-submit:hover {
+      background: linear-gradient(135deg, #991b1b, #b71c1c);
+      box-shadow: 0 6px 18px rgba(211, 47, 47, 0.4);
+    }
+
+    /* Pulse dot on rare badge */
+    .pulse-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #fbbf24;
+      animation: pulse 1.5s infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.6; transform: scale(1.3); }
+    }
+
     @media (max-width: 700px) {
       body { flex-direction: column; height: auto; overflow: auto; }
       .sidebar { width: 100%; min-width: unset; flex-direction: row; padding: 12px 16px; border-right: none; border-bottom: 1px solid var(--border); }
@@ -415,9 +517,10 @@
   <aside class="sidebar">
     <a href="#" class="logo">
       <div class="logo-icon">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <svg class="blood-drop" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path d="M12 2C12 2 5 9.5 5 14a7 7 0 0014 0C19 9.5 12 2 12 2z"/>
         </svg>
+        <div class="plus-dot">+</div>
       </div>
       life link
     </a>
@@ -453,10 +556,7 @@
     <div class="profile-card">
       <div class="profile-top">
         <div class="avatar">
-          <svg viewBox="0 0 24 24" stroke-width="1.5">
-            <circle cx="12" cy="8" r="4"/>
-            <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke-linecap="round"/>
-          </svg>
+          <svg viewBox="0 0 24 24" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke-linecap="round"/></svg>
         </div>
         <div>
           <div class="profile-name" id="display-fullname">Loading...</div>
@@ -477,9 +577,7 @@
           <div class="stat-label">Verification Status</div>
           <div class="stat-value">
             <div class="verified-icon">
-              <svg viewBox="0 0 24 24" stroke-width="3">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
+              <svg viewBox="0 0 24 24" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
             </div>
             Verified
           </div>
@@ -506,23 +604,24 @@
       </button>
     </div>
 
-    <!-- Donor Form -->
+    <!-- ── DONOR FORM ── -->
     <div class="form-card" id="donorForm">
       <div class="form-title">Blood Donation Registration</div>
       <div class="form-grid">
 
         <div class="form-group">
           <label>Blood Group</label>
-          <select id="donorBloodGroup">
+          <select id="donorBloodGroup" onchange="checkRareBloodDonor()">
             <option value="">Select Blood Group</option>
-            <option value="A+">A+</option>
-            <option value="A-">A-</option>
-            <option value="B+">B+</option>
-            <option value="B-">B-</option>
-            <option value="O+">O+</option>
-            <option value="O-">O-</option>
-            <option value="AB+">AB+</option>
-            <option value="AB-">AB-</option>
+            <option value="A+">A Positive (A+)</option>
+            <option value="A-">A Negative (A−)</option>
+            <option value="B+">B Positive (B+)</option>
+            <option value="B-">B Negative (B−)</option>
+            <option value="O+">O Positive (O+)</option>
+            <option value="O-">O Negative (O−)</option>
+            <option value="AB+">AB Positive (AB+)</option>
+            <option value="AB-">AB Negative (AB−)</option>
+            <option value="Rh-null">Rh-null (Golden Blood)</option>
           </select>
         </div>
 
@@ -561,23 +660,24 @@
       <button class="submit-btn" type="button" onclick="submitDonorForm()">Register</button>
     </div>
 
-    <!-- Request Form -->
+    <!-- ── REQUEST FORM ── -->
     <div class="form-card" id="requestForm">
       <div class="form-title">Blood Request</div>
       <div class="form-grid">
 
         <div class="form-group">
           <label>Blood Group Needed</label>
-          <select id="requestBloodGroup">
+          <select id="requestBloodGroup" onchange="checkRareBloodRequest()">
             <option value="">Select Blood Group</option>
-            <option value="A+">A+</option>
-            <option value="A-">A-</option>
-            <option value="B+">B+</option>
-            <option value="B-">B-</option>
-            <option value="O+">O+</option>
-            <option value="O-">O-</option>
-            <option value="AB+">AB+</option>
-            <option value="AB-">AB-</option>
+            <option value="A+">A Positive (A+)</option>
+            <option value="A-">A Negative (A−)</option>
+            <option value="B+">B Positive (B+)</option>
+            <option value="B-">B Negative (B−)</option>
+            <option value="O+">O Positive (O+)</option>
+            <option value="O-">O Negative (O−)</option>
+            <option value="AB+">AB Positive (AB+)</option>
+            <option value="AB-">AB Negative (AB−)</option>
+            <option value="Rh-null">Rh-null (Golden Blood)</option>
           </select>
         </div>
 
@@ -616,56 +716,116 @@
     <!-- Nearby Centers -->
     <div class="nearby-card">
       <div class="nearby-title">
-        <svg viewBox="0 0 24 24" stroke-width="1.8">
-          <rect x="3" y="3" width="18" height="18" rx="2"/>
-          <line x1="12" y1="8" x2="12" y2="16"/>
-          <line x1="8" y1="12" x2="16" y2="12"/>
-        </svg>
+        <svg viewBox="0 0 24 24" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
         Nearby Red Cross Centers
       </div>
 
       <div class="center-item">
         <div class="center-name">Central Red Cross</div>
-        <div class="center-info">
-          <svg viewBox="0 0 24 24" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          Chakrapath, Kathmandu
-        </div>
-        <div class="center-info">
-          <svg viewBox="0 0 24 24" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 010 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
-          <a href="tel:+977-1-4228094">+977-1-4228094</a>
-        </div>
+        <div class="center-info"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Chakrapath, Kathmandu</div>
+        <div class="center-info"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 010 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg><a href="tel:+977-1-4228094">+977-1-4228094</a></div>
       </div>
 
       <div class="center-item">
         <div class="center-name">Nepal Red Cross Society HQ</div>
-        <div class="center-info">
-          <svg viewBox="0 0 24 24" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          Kalimati, Kathmandu
-        </div>
-        <div class="center-info">
-          <svg viewBox="0 0 24 24" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 010 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
-          <a href="tel:+977-1-4270650">+977-1-4270650</a>
-        </div>
-      </div>
-
-      <div class="center-item">
-        <div class="center-name">Kathmandu District Chapter</div>
-        <div class="center-info">
-          <svg viewBox="0 0 24 24" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          Maharajgunj, Kathmandu
-        </div>
-        <div class="center-info">
-          <svg viewBox="0 0 24 24" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 010 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
-          <a href="tel:+977-1-4412830">+977-1-4412830</a>
-        </div>
+        <div class="center-info"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Kalimati, Kathmandu</div>
+        <div class="center-info"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 010 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg><a href="tel:+977-1-4270650">+977-1-4270650</a></div>
       </div>
 
     </div>
   </main>
 
+  <!-- ═══════════════════════════════════════════
+       RARE BLOOD MODAL (Donor)
+  ═══════════════════════════════════════════ -->
+  <div class="rare-modal-overlay" id="rareDonorModal">
+    <div class="rare-modal">
+      <div class="rare-modal-header">
+        <button class="rare-modal-close" onclick="closeRareModal('rareDonorModal')">✕</button>
+        <div class="rare-modal-icon">
+          <svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M12 2C12 2 5 9.5 5 14a7 7 0 0 0 14 0C19 9.5 12 2 12 2z"/></svg>
+        </div>
+        <div class="rare-blood-badge" id="rareDonorBadge">
+          <div class="pulse-dot"></div>
+          <span id="rareDonorBadgeText">Rare Blood Type</span>
+        </div>
+        <div class="rare-modal-title">You have a rare blood type!</div>
+        <div class="rare-modal-sub">We'd love to keep you in our special registry so we can reach you when someone needs this blood type.</div>
+      </div>
+      <div class="rare-modal-body">
+        <div class="rare-info-box">
+          <div class="rare-info-icon">
+            <svg viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+          </div>
+          <div class="rare-info-text">
+            <strong>Why this matters:</strong> Rare blood types like <span id="rareDonorBloodText">this</span> are extremely limited. When a patient urgently needs this, we will contact you directly — you could save a life only you can save.
+          </div>
+        </div>
+
+        <div class="rare-form-group">
+          <label class="rare-form-label">Your Contact Number</label>
+          <input type="tel" class="rare-input phone" id="rareDonorContact" placeholder="+977 98XXXXXXXX" />
+        </div>
+      </div>
+      <div class="rare-modal-footer">
+        <button class="rare-btn-cancel" onclick="closeRareModal('rareDonorModal')">Skip for now</button>
+        <button class="rare-btn-submit" onclick="submitRareContact('donor')">Save My Contact</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       RARE BLOOD MODAL (Request)
+  ═══════════════════════════════════════════ -->
+  <div class="rare-modal-overlay" id="rareRequestModal">
+    <div class="rare-modal">
+      <div class="rare-modal-header">
+        <button class="rare-modal-close" onclick="closeRareModal('rareRequestModal')">✕</button>
+        <div class="rare-modal-icon">
+          <svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <div class="rare-blood-badge" id="rareRequestBadge">
+          <div class="pulse-dot"></div>
+          <span id="rareRequestBadgeText">Rare Blood Requested</span>
+        </div>
+        <div class="rare-modal-title">This is a rare blood type</div>
+        <div class="rare-modal-sub">Finding <span id="rareRequestBloodText" style="font-weight:700">this blood</span> may take time. Leave your contact and we'll reach you as soon as a match is found.</div>
+      </div>
+      <div class="rare-modal-body">
+        <div class="rare-info-box">
+          <div class="rare-info-icon">
+            <svg viewBox="0 0 24 24" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 010 1.18 2 2 0 012 0h3a2 2 0 012 1.72.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+          </div>
+          <div class="rare-info-text">
+            <strong>We will contact you</strong> the moment a compatible donor is found for <span id="rareRequestBloodText2" style="font-weight:600;color:var(--red)">this blood type</span>. Our team monitors rare blood availability 24/7.
+          </div>
+        </div>
+
+        <div class="rare-form-group">
+          <label class="rare-form-label">Contact Number for Notification</label>
+          <input type="tel" class="rare-input phone" id="rareRequestContact" placeholder="+977 98XXXXXXXX" />
+        </div>
+      </div>
+      <div class="rare-modal-footer">
+        <button class="rare-btn-cancel" onclick="closeRareModal('rareRequestModal')">Continue Without</button>
+        <button class="rare-btn-submit" onclick="submitRareContact('request')">Notify Me When Found</button>
+      </div>
+    </div>
+  </div>
+
   <div class="toast" id="toast"></div>
 
   <script>
+    const RARE_BLOOD_TYPES = ['A-', 'B-', 'O-', 'AB-', 'Rh-null'];
+
+    const RARE_LABELS = {
+      'A-':      'A Negative (A−)',
+      'B-':      'B Negative (B−)',
+      'O-':      'O Negative (O−)',
+      'AB-':     'AB Negative (AB−)',
+      'Rh-null': 'Rh-null (Golden Blood)',
+    };
+
     const userData = {
       firstName: "Riya",
       fullName: "Riya Thapa",
@@ -709,6 +869,56 @@
       setTimeout(() => { t.className = 'toast'; }, 3500);
     }
 
+    // ── Rare blood checks ──
+    function checkRareBloodDonor() {
+      const val = document.getElementById('donorBloodGroup').value;
+      if (RARE_BLOOD_TYPES.includes(val)) {
+        const label = RARE_LABELS[val] || val;
+        document.getElementById('rareDonorBadgeText').textContent = label;
+        document.getElementById('rareDonorBloodText').textContent = label;
+        document.getElementById('rareDonorContact').value = '';
+        document.getElementById('rareDonorModal').classList.add('open');
+      }
+    }
+
+    function checkRareBloodRequest() {
+      const val = document.getElementById('requestBloodGroup').value;
+      if (RARE_BLOOD_TYPES.includes(val)) {
+        const label = RARE_LABELS[val] || val;
+        document.getElementById('rareRequestBadgeText').textContent = label;
+        document.getElementById('rareRequestBloodText').textContent = label;
+        document.getElementById('rareRequestBloodText2').textContent = label;
+        document.getElementById('rareRequestContact').value = '';
+        document.getElementById('rareRequestModal').classList.add('open');
+      }
+    }
+
+    function closeRareModal(id) {
+      document.getElementById(id).classList.remove('open');
+    }
+
+    function submitRareContact(type) {
+      const inputId = type === 'donor' ? 'rareDonorContact' : 'rareRequestContact';
+      const contact = document.getElementById(inputId).value.trim();
+      if (!contact) {
+        document.getElementById(inputId).style.borderColor = '#ef4444';
+        document.getElementById(inputId).focus();
+        return;
+      }
+      document.getElementById(inputId).style.borderColor = '';
+      const modalId = type === 'donor' ? 'rareDonorModal' : 'rareRequestModal';
+      closeRareModal(modalId);
+      showToast(type === 'donor'
+        ? 'Contact saved! We\'ll reach you when needed.'
+        : 'We\'ll contact you when a match is found.', 'success');
+    }
+
+    // Close on overlay click
+    document.querySelectorAll('.rare-modal-overlay').forEach(o => {
+      o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); });
+    });
+
+    // ── Validation ──
     function clearErrors() {
       document.querySelectorAll('.error-msg').forEach(e => e.classList.remove('show'));
       document.querySelectorAll('.input-error').forEach(e => e.classList.remove('input-error'));
@@ -717,41 +927,28 @@
     function validateAge(input) {
       const val = parseInt(input.value);
       const err = document.getElementById('ageError');
-      if (input.value !== '' && val < 18) {
-        err.classList.add('show');
-        input.classList.add('input-error');
-      } else {
-        err.classList.remove('show');
-        input.classList.remove('input-error');
-      }
+      if (input.value !== '' && val < 18) { err.classList.add('show'); input.classList.add('input-error'); }
+      else { err.classList.remove('show'); input.classList.remove('input-error'); }
     }
 
     function validateWeight(input) {
       const val = parseFloat(input.value);
       const err = document.getElementById('weightError');
-      if (input.value !== '' && val < 45) {
-        err.classList.add('show');
-        input.classList.add('input-error');
-      } else {
-        err.classList.remove('show');
-        input.classList.remove('input-error');
-      }
+      if (input.value !== '' && val < 45) { err.classList.add('show'); input.classList.add('input-error'); }
+      else { err.classList.remove('show'); input.classList.remove('input-error'); }
     }
 
     function submitDonorForm() {
       clearErrors();
       let valid = true;
 
-      const bg = document.getElementById('donorBloodGroup').value;
-      const loc = document.getElementById('donorLocation').value.trim();
-      const age = parseInt(document.getElementById('donorAge').value);
-      const weight = parseFloat(document.getElementById('donorWeight').value);
+      const bg   = document.getElementById('donorBloodGroup').value;
+      const loc  = document.getElementById('donorLocation').value.trim();
+      const age  = parseInt(document.getElementById('donorAge').value);
+      const wt   = parseFloat(document.getElementById('donorWeight').value);
       const units = parseFloat(document.getElementById('donorUnits').value);
 
-      if (!bg || !loc) {
-        showToast('Please fill in all required fields.', 'error');
-        return;
-      }
+      if (!bg || !loc) { showToast('Please fill in all required fields.', 'error'); return; }
 
       if (isNaN(age) || age < 18) {
         document.getElementById('ageError').classList.add('show');
@@ -759,7 +956,7 @@
         valid = false;
       }
 
-      if (isNaN(weight) || weight < 45) {
+      if (isNaN(wt) || wt < 45) {
         document.getElementById('weightError').classList.add('show');
         document.getElementById('donorWeight').classList.add('input-error');
         valid = false;
@@ -771,15 +968,13 @@
         valid = false;
       }
 
-      if (valid) {
-        showToast('Donation registration submitted successfully!', 'success');
-      }
+      if (valid) showToast('Donation registration submitted successfully!', 'success');
     }
 
     function updateUrgencyStyle() {
-      const sel = document.getElementById('requestUrgency');
+      const sel  = document.getElementById('requestUrgency');
       const hint = document.getElementById('urgencyHint');
-      const val = sel.value;
+      const val  = sel.value;
       sel.className = val ? 'urgency-' + val : '';
       if (val === 'normal') {
         hint.style.display = 'block';
@@ -797,20 +992,17 @@
     }
 
     function submitRequestForm() {
-      const bg = document.getElementById('requestBloodGroup').value;
-      const loc = document.getElementById('requestLocation').value.trim();
-      const date = document.getElementById('requestDate').value;
-      const units = parseFloat(document.getElementById('requestUnits').value);
+      const bg     = document.getElementById('requestBloodGroup').value;
+      const loc    = document.getElementById('requestLocation').value.trim();
+      const date   = document.getElementById('requestDate').value;
+      const units  = parseFloat(document.getElementById('requestUnits').value);
       const urgency = document.getElementById('requestUrgency').value;
-      const errEl = document.getElementById('reqUnitsError');
+      const errEl  = document.getElementById('reqUnitsError');
 
       errEl.classList.remove('show');
       document.getElementById('requestUnits').classList.remove('input-error');
 
-      if (!bg || !loc || !date || !urgency) {
-        showToast('Please fill in all required fields.', 'error');
-        return;
-      }
+      if (!bg || !loc || !date || !urgency) { showToast('Please fill in all required fields.', 'error'); return; }
 
       if (isNaN(units) || units < 400 || units > 2000) {
         errEl.classList.add('show');

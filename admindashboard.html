@@ -4,23 +4,538 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Life Link – Admin Dashboard</title>
-  <link rel="stylesheet" href="admin.css" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --crimson: #9B1B0F;
+      --crimson-dark: #6e1009;
+      --crimson-mid: #C0392B;
+      --red-bright: #E04535;
+      --red-soft: #fdecea;
+      --blush: #fce8e6;
+      --sidebar-bg: #7a1208;
+      --body-bg: #f5e8e6;
+      --card-bg: #ffffff;
+      --table-head: #fdecea;
+      --text-dark: #1c0a08;
+      --text-mid: #5a2a24;
+      --text-muted: #9e6a63;
+      --border: #f0c8c2;
+      --border-soft: #f8deda;
+      --white: #ffffff;
+      --radius: 8px;
+      --radius-lg: 14px;
+      --sidebar-w: 224px;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--body-bg);
+      color: var(--text-dark);
+      display: flex;
+      min-height: 100vh;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      min-width: var(--sidebar-w);
+      height: 100vh;
+      position: sticky;
+      top: 0;
+      background: var(--sidebar-bg);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 24px 18px 20px;
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      color: #fff;
+      letter-spacing: 0.03em;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .logo-icon {
+      width: 34px;
+      height: 34px;
+      background: #fff;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    /* Blood drop in red, plus sign in red on top */
+    .logo-icon .blood-drop {
+      width: 16px;
+      height: 16px;
+      fill: #C0392B;
+    }
+
+    .logo-icon .plus-sign {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      width: 13px;
+      height: 13px;
+      background: #C0392B;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1;
+    }
+
+    .sidebar-subtitle {
+      font-size: 0.71rem;
+      color: rgba(255,255,255,0.45);
+      padding: 6px 18px 16px;
+    }
+
+    .nav {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      padding: 8px 10px;
+      flex: 1;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: var(--radius);
+      color: rgba(255,255,255,0.65);
+      font-size: 13px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s, color 0.15s;
+      border: none;
+      background: transparent;
+      font-family: inherit;
+      width: 100%;
+      text-align: left;
+    }
+
+    .nav-item svg { width: 16px; height: 16px; flex-shrink: 0; stroke: currentColor; fill: none; }
+    .nav-item:hover { background: rgba(255,255,255,0.12); color: #fff; }
+    .nav-item.active { background: rgba(255,255,255,0.18); color: #fff; font-weight: 500; }
+
+    .sidebar-logout {
+      padding: 0 10px 16px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding-top: 12px;
+      margin-top: 4px;
+    }
+
+    .logout-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: var(--radius);
+      color: rgba(255,255,255,0.45);
+      font-size: 13px;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+
+    .logout-btn svg { width: 16px; height: 16px; stroke: currentColor; fill: none; }
+    .logout-btn:hover { color: #fff; background: rgba(255,255,255,0.1); }
+
+    /* ── Main ── */
+    .main {
+      flex: 1;
+      padding: 28px 30px;
+      overflow-y: auto;
+    }
+
+    .page-section { display: none; }
+    .page-section.active { display: block; }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--crimson-dark);
+      margin-bottom: 22px;
+      padding-bottom: 14px;
+      border-bottom: 2px solid var(--border);
+    }
+
+    /* ── Stat Cards ── */
+    .stat-cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .stat-card {
+      border-radius: var(--radius-lg);
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      position: relative;
+      overflow: hidden;
+      color: #fff;
+    }
+
+    .stat-card:nth-child(1) { background: linear-gradient(135deg, #9B1B0F, #C0392B); }
+    .stat-card:nth-child(2) { background: linear-gradient(135deg, #b5230f, #d9442e); }
+    .stat-card:nth-child(3) { background: linear-gradient(135deg, #7a1208, #a01a0d); }
+    .stat-card:nth-child(4) { background: linear-gradient(135deg, #c44a1a, #e8683a); }
+
+    .stat-card::after {
+      content: '';
+      position: absolute;
+      right: -18px;
+      bottom: -18px;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.07);
+    }
+
+    .stat-card .stat-icon svg { width: 26px; height: 26px; stroke: rgba(255,255,255,0.85); fill: none; }
+
+    .stat-card .stat-number {
+      font-size: 30px;
+      font-weight: 600;
+      line-height: 1;
+    }
+
+    .stat-card .stat-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: rgba(255,255,255,0.7);
+    }
+
+    /* ── Overview Bottom ── */
+    .overview-bottom {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .overview-card {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      padding: 20px 22px;
+      border: 1px solid var(--border-soft);
+    }
+
+    .overview-card h3 {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--crimson);
+      margin-bottom: 16px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .activity-item {
+      background: var(--red-soft);
+      border-radius: var(--radius);
+      padding: 13px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .activity-item .count { color: var(--crimson); font-weight: 700; }
+
+    .log-item {
+      background: var(--red-soft);
+      border-radius: var(--radius);
+      padding: 13px 16px;
+      font-size: 13px;
+      color: var(--text-mid);
+    }
+
+    /* ── Table Card ── */
+    .table-card {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid var(--border-soft);
+    }
+
+    table { width: 100%; border-collapse: collapse; }
+
+    thead tr { background: var(--table-head); }
+    thead th {
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--crimson);
+      border-bottom: 1px solid var(--border);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+    }
+
+    tbody tr { border-bottom: 1px solid #fce8e5; transition: background 0.15s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover td { background: #fffaf9; }
+
+    tbody td { padding: 12px 16px; font-size: 13.5px; color: var(--text-dark); vertical-align: middle; }
+
+    /* ── Badges ── */
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 99px;
+    }
+
+    .badge-active, .badge-approved { background: #d1fae5; color: #065f46; }
+    .badge-inactive, .badge-pending { background: #fee2e2; color: #991b1b; }
+    .badge-pending-yellow { background: #fef3c7; color: #92400e; }
+
+    /* ── Action Buttons ── */
+    .action-btns { display: flex; gap: 6px; align-items: center; }
+
+    .btn-edit, .btn-delete {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 5px 11px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--white);
+      cursor: pointer;
+      transition: all 0.15s;
+      color: var(--text-muted);
+      font-family: inherit;
+    }
+
+    .btn-edit svg, .btn-delete svg { width: 12px; height: 12px; stroke: currentColor; fill: none; }
+    .btn-edit:hover { border-color: var(--border); background: var(--blush); color: var(--crimson); }
+    .btn-delete:hover { border-color: #fca5a5; background: #fee2e2; color: #b91c1c; }
+
+    .btn-accept, .btn-reject {
+      padding: 5px 14px;
+      border-radius: 20px;
+      border: none;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      transition: opacity 0.15s;
+      font-family: inherit;
+    }
+
+    .btn-accept { background: #d1fae5; color: #065f46; }
+    .btn-reject { background: #fee2e2; color: #991b1b; }
+    .btn-accept:hover, .btn-reject:hover { opacity: 0.8; }
+
+    /* ── Modals ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(60,5,0,0.4);
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: #fff;
+      border-radius: var(--radius-lg);
+      padding: 0;
+      width: 460px;
+      max-width: 95vw;
+      box-shadow: 0 24px 64px rgba(120,10,0,0.18);
+      overflow: hidden;
+    }
+
+    .modal-top {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border-soft);
+    }
+
+    .modal-icon-wrap {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--blush);
+    }
+
+    .modal-icon-wrap svg { width: 18px; height: 18px; stroke: var(--crimson); fill: none; }
+
+    .modal-title { font-size: 15px; font-weight: 600; color: var(--text-dark); }
+    .modal-subtitle { font-size: 12px; color: var(--text-muted); }
+
+    .modal-close {
+      margin-left: auto;
+      background: none;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      color: var(--text-muted);
+      padding: 4px;
+      border-radius: 4px;
+      line-height: 1;
+    }
+
+    .modal-close:hover { background: var(--blush); color: var(--crimson); }
+
+    .modal-body { padding: 18px 20px; display: flex; flex-direction: column; gap: 14px; }
+
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    .form-label { font-size: 12px; font-weight: 500; color: var(--text-mid); }
+
+    .form-input, .form-select {
+      padding: 9px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 13.5px;
+      color: var(--text-dark);
+      background: #fff8f7;
+      outline: none;
+      font-family: inherit;
+      transition: border-color 0.15s;
+      width: 100%;
+    }
+
+    .form-input:focus, .form-select:focus { border-color: var(--crimson-mid); }
+
+    .modal-footer {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      padding: 14px 20px;
+      border-top: 1px solid var(--border-soft);
+    }
+
+    .foot-btn {
+      padding: 8px 18px;
+      border-radius: var(--radius);
+      font-size: 13.5px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      border: 1px solid transparent;
+      font-family: inherit;
+    }
+
+    .foot-cancel { background: #fff; border-color: var(--border); color: var(--text-muted); }
+    .foot-cancel:hover { background: var(--body-bg); }
+    .foot-save { background: var(--crimson-mid); color: #fff; }
+    .foot-save:hover { background: var(--crimson); }
+
+    /* Delete modal */
+    .confirm-modal {
+      background: #fff;
+      border-radius: var(--radius-lg);
+      width: 360px;
+      max-width: 95vw;
+      box-shadow: 0 24px 64px rgba(120,10,0,0.18);
+      overflow: hidden;
+    }
+
+    .confirm-body { padding: 28px 24px 12px; text-align: center; }
+
+    .confirm-ring {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: #fee2e2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 14px;
+    }
+
+    .confirm-ring svg { width: 26px; height: 26px; stroke: #dc2626; fill: none; }
+    .confirm-h { font-size: 16px; font-weight: 600; margin-bottom: 6px; color: var(--text-dark); }
+    .confirm-p { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+
+    .confirm-footer {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      padding: 14px 20px;
+    }
+
+    .foot-danger { background: #dc2626; color: #fff; }
+    .foot-danger:hover { background: #b91c1c; }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: var(--crimson-dark);
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: all 0.25s;
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    .toast.show { opacity: 1; transform: translateY(0); }
+  </style>
 </head>
 <body>
 
 <!-- ===== SIDEBAR ===== -->
 <aside class="sidebar">
-  <div class="sidebar-logo">
+  <div class="logo">
     <div class="logo-icon">
-      <svg viewBox="0 0 24 24"><path d="M12 2C12 2 5 9.5 5 14a7 7 0 0 0 14 0C19 9.5 12 2 12 2z"/></svg>
+      <!-- Blood drop in red -->
+      <svg class="blood-drop" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2C12 2 5 9.5 5 14a7 7 0 0 0 14 0C19 9.5 12 2 12 2z"/>
+      </svg>
+      <!-- Red plus badge -->
+      <div class="plus-sign">+</div>
     </div>
-    <span class="logo-text">life link</span>
+    life link
   </div>
   <div class="sidebar-subtitle">Admin control panel</div>
 
-  <nav class="sidebar-nav">
+  <nav class="nav">
     <button class="nav-item active" onclick="showPage('overview', this)">
-      <svg viewBox="0 0 24 24" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+      <svg viewBox="0 0 24 24" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
       Overview
     </button>
     <button class="nav-item" onclick="showPage('manage-users', this)">
@@ -68,17 +583,17 @@
       <div class="stat-card">
         <div class="stat-icon"><svg viewBox="0 0 24 24" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg></div>
         <div class="stat-number">20</div>
-        <div class="stat-label">Red cross center</div>
+        <div class="stat-label">Red Cross Centers</div>
       </div>
       <div class="stat-card">
         <div class="stat-icon"><svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M12 2C12 2 5 9.5 5 14a7 7 0 0 0 14 0C19 9.5 12 2 12 2z"/></svg></div>
         <div class="stat-number">4</div>
-        <div class="stat-label">Active Donor</div>
+        <div class="stat-label">Active Donors</div>
       </div>
       <div class="stat-card">
-        <div class="stat-icon"><svg viewBox="0 0 24 24" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg></div>
+        <div class="stat-icon"><svg viewBox="0 0 24 24" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
         <div class="stat-number">2</div>
-        <div class="stat-label">Total request this month</div>
+        <div class="stat-label">Requests This Month</div>
       </div>
     </div>
     <div class="overview-bottom">
@@ -101,9 +616,7 @@
     <div class="table-card">
       <table id="users-table">
         <thead>
-          <tr>
-            <th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Joined</th><th>Actions</th>
-          </tr>
+          <tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Joined</th><th>Actions</th></tr>
         </thead>
         <tbody>
           <tr data-id="u1">
@@ -111,17 +624,17 @@
             <td><span class="badge badge-active">Active</span></td>
             <td>2026-01-15</td>
             <td class="action-btns">
-              <button class="btn-edit" onclick="openEdit('users','u1',this)"><svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
-              <button class="btn-delete" onclick="openDelete('u1','users-table')"><svg viewBox="0 0 24 24" stroke-width="1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>
+              <button class="btn-edit" onclick="openEdit('users','u1',this)"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button>
+              <button class="btn-delete" onclick="openDelete('u1','users-table')"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg> Delete</button>
             </td>
           </tr>
           <tr data-id="u2">
-            <td>John Doe</td><td>johnd@gmail.com</td><td>Users</td>
+            <td>Jane Smith</td><td>janes@gmail.com</td><td>Users</td>
             <td><span class="badge badge-inactive">Inactive</span></td>
             <td>2026-01-15</td>
             <td class="action-btns">
-              <button class="btn-edit" onclick="openEdit('users','u2',this)"><svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
-              <button class="btn-delete" onclick="openDelete('u2','users-table')"><svg viewBox="0 0 24 24" stroke-width="1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>
+              <button class="btn-edit" onclick="openEdit('users','u2',this)"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button>
+              <button class="btn-delete" onclick="openDelete('u2','users-table')"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg> Delete</button>
             </td>
           </tr>
         </tbody>
@@ -131,21 +644,19 @@
 
   <!-- RED CROSS CENTERS -->
   <section id="red-cross" class="page-section">
-    <h2 class="section-title">Red Cross Center</h2>
+    <h2 class="section-title">Red Cross Centers</h2>
     <div class="table-card">
       <table id="redcross-table">
         <thead>
-          <tr>
-            <th>Center Name</th><th>Location</th><th>Contact</th><th>Status</th><th>Actions</th>
-          </tr>
+          <tr><th>Center Name</th><th>Location</th><th>Contact</th><th>Status</th><th>Actions</th></tr>
         </thead>
         <tbody>
           <tr data-id="rc1">
             <td>Central Red Cross Center</td><td>Bhaktapur</td><td>9987668450</td>
             <td><span class="badge badge-active">Active</span></td>
             <td class="action-btns">
-              <button class="btn-edit" onclick="openEdit('redcross','rc1',this)"><svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
-              <button class="btn-delete" onclick="openDelete('rc1','redcross-table')"><svg viewBox="0 0 24 24" stroke-width="1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>
+              <button class="btn-edit" onclick="openEdit('redcross','rc1',this)"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button>
+              <button class="btn-delete" onclick="openDelete('rc1','redcross-table')"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg> Delete</button>
             </td>
           </tr>
         </tbody>
@@ -159,9 +670,7 @@
     <div class="table-card">
       <table id="request-table">
         <thead>
-          <tr>
-            <th>Patient</th><th>Blood Group</th><th>Units</th><th>Status</th><th>Date</th><th>Actions</th>
-          </tr>
+          <tr><th>Patient</th><th>Blood Group</th><th>Units</th><th>Status</th><th>Date</th><th>Actions</th></tr>
         </thead>
         <tbody>
           <tr data-id="r1">
@@ -169,17 +678,17 @@
             <td><span class="badge badge-approved">Approved</span></td>
             <td>2026-04-02</td>
             <td class="action-btns">
-              <button class="btn-edit" onclick="openEdit('request','r1',this)"><svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
-              <button class="btn-delete" onclick="openDelete('r1','request-table')"><svg viewBox="0 0 24 24" stroke-width="1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>
+              <button class="btn-edit" onclick="openEdit('request','r1',this)"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button>
+              <button class="btn-delete" onclick="openDelete('r1','request-table')"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg> Delete</button>
             </td>
           </tr>
           <tr data-id="r2">
             <td>Emma Davis</td><td>A+</td><td>1</td>
-            <td><span class="badge badge-pending">Pending</span></td>
+            <td><span class="badge badge-pending-yellow">Pending</span></td>
             <td>2026-04-02</td>
             <td class="action-btns">
-              <button class="btn-edit" onclick="openEdit('request','r2',this)"><svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
-              <button class="btn-delete" onclick="openDelete('r2','request-table')"><svg viewBox="0 0 24 24" stroke-width="1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>
+              <button class="btn-edit" onclick="openEdit('request','r2',this)"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button>
+              <button class="btn-delete" onclick="openDelete('r2','request-table')"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg> Delete</button>
             </td>
           </tr>
         </tbody>
@@ -193,9 +702,7 @@
     <div class="table-card">
       <table id="donors-table">
         <thead>
-          <tr>
-            <th>Name</th><th>Blood Group</th><th>Total Donation</th><th>Status</th><th>Last Donation</th><th>Actions</th>
-          </tr>
+          <tr><th>Name</th><th>Blood Group</th><th>Total Donation</th><th>Status</th><th>Last Donation</th><th>Actions</th></tr>
         </thead>
         <tbody>
           <tr data-id="d1">
@@ -203,17 +710,17 @@
             <td><span class="badge badge-active">Active</span></td>
             <td>2026-01-15</td>
             <td class="action-btns">
-              <button class="btn-edit" onclick="openEdit('donors','d1',this)"><svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
-              <button class="btn-delete" onclick="openDelete('d1','donors-table')"><svg viewBox="0 0 24 24" stroke-width="1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>
+              <button class="btn-edit" onclick="openEdit('donors','d1',this)"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button>
+              <button class="btn-delete" onclick="openDelete('d1','donors-table')"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg> Delete</button>
             </td>
           </tr>
           <tr data-id="d2">
-            <td>John Doe</td><td>A+</td><td>4</td>
+            <td>Jane Smith</td><td>A+</td><td>4</td>
             <td><span class="badge badge-inactive">Inactive</span></td>
             <td>2026-01-15</td>
             <td class="action-btns">
-              <button class="btn-edit" onclick="openEdit('donors','d2',this)"><svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
-              <button class="btn-delete" onclick="openDelete('d2','donors-table')"><svg viewBox="0 0 24 24" stroke-width="1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>
+              <button class="btn-edit" onclick="openEdit('donors','d2',this)"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button>
+              <button class="btn-delete" onclick="openDelete('d2','donors-table')"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg> Delete</button>
             </td>
           </tr>
         </tbody>
@@ -227,13 +734,11 @@
     <div class="table-card">
       <table id="verification-table">
         <thead>
-          <tr>
-            <th>Name</th><th>Type</th><th>Status</th><th>Submitted</th><th>Actions</th>
-          </tr>
+          <tr><th>Name</th><th>Type</th><th>Status</th><th>Submitted</th><th>Actions</th></tr>
         </thead>
         <tbody>
           <tr data-id="v1">
-            <td>John Doe</td><td>ID verification</td>
+            <td>John Doe</td><td>ID Verification</td>
             <td><span class="badge badge-pending-yellow">Pending</span></td>
             <td>2026-01-15</td>
             <td class="action-btns">
@@ -242,7 +747,7 @@
             </td>
           </tr>
           <tr data-id="v2">
-            <td>John Doe</td><td>Donor certificate</td>
+            <td>Jane Smith</td><td>Donor Certificate</td>
             <td><span class="badge badge-approved">Approved</span></td>
             <td>2026-01-15</td>
             <td class="action-btns">
@@ -257,33 +762,51 @@
 
 </main>
 
-<!-- ===== EDIT MODAL ===== -->
+<!-- EDIT MODAL -->
 <div class="modal-overlay" id="edit-modal">
   <div class="modal">
-    <button class="modal-close" onclick="closeModal('edit-modal')">&#x2715;</button>
-    <h3 id="modal-title">Edit Record</h3>
-    <div id="modal-fields"></div>
-    <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeModal('edit-modal')">Cancel</button>
-      <button class="btn-save" onclick="saveEdit()">Save Changes</button>
+    <div class="modal-top">
+      <div class="modal-icon-wrap">
+        <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      </div>
+      <div>
+        <div class="modal-title" id="modal-title">Edit Record</div>
+        <div class="modal-subtitle">Update the details below</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('edit-modal')">✕</button>
+    </div>
+    <div class="modal-body"><div id="modal-fields"></div></div>
+    <div class="modal-footer">
+      <button class="foot-btn foot-cancel" onclick="closeModal('edit-modal')">Cancel</button>
+      <button class="foot-btn foot-save" onclick="saveEdit()">Save Changes</button>
     </div>
   </div>
 </div>
 
-<!-- ===== DELETE CONFIRM MODAL ===== -->
+<!-- DELETE MODAL -->
 <div class="modal-overlay" id="delete-modal">
   <div class="confirm-modal">
-    <h3>Confirm Delete</h3>
-    <p>Are you sure you want to delete this record? This action cannot be undone.</p>
-    <div>
-      <button class="btn-cancel" onclick="closeModal('delete-modal')">Cancel</button>
-      <button class="danger-btn" onclick="confirmDelete()">Delete</button>
+    <div class="modal-top" style="border-bottom:none;padding-bottom:0">
+      <div style="flex:1"></div>
+      <button class="modal-close" onclick="closeModal('delete-modal')">✕</button>
+    </div>
+    <div class="confirm-body">
+      <div class="confirm-ring">
+        <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+      </div>
+      <div class="confirm-h">Delete this record?</div>
+      <div class="confirm-p">This action is permanent and cannot be undone.</div>
+    </div>
+    <div class="confirm-footer">
+      <button class="foot-btn foot-cancel" onclick="closeModal('delete-modal')">Cancel</button>
+      <button class="foot-btn foot-danger" onclick="confirmDelete()">Yes, Delete</button>
     </div>
   </div>
 </div>
 
+<div class="toast" id="toast"></div>
+
 <script>
-// ===== NAV =====
 function showPage(id, btn) {
   document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -291,13 +814,15 @@ function showPage(id, btn) {
   btn.classList.add('active');
 }
 
-// ===== MODAL HELPERS =====
-function closeModal(id) {
-  document.getElementById(id).classList.remove('open');
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2600);
 }
 
-// ===== EDIT =====
-let _editContext = null;
+document.querySelectorAll('.modal-overlay').forEach(o => o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); }));
 
 const editFields = {
   users: [
@@ -326,20 +851,22 @@ const editFields = {
   ],
 };
 
+let _editContext = null;
+
 function openEdit(type, rowId, btn) {
   const row = btn.closest('tr');
   const cells = row.querySelectorAll('td');
   const fields = editFields[type];
-  document.getElementById('modal-title').textContent = 'Edit Record';
   const container = document.getElementById('modal-fields');
   container.innerHTML = '';
   fields.forEach(f => {
     const val = f.key === 3 ? cells[f.key].querySelector('.badge').textContent.trim() : cells[f.key].textContent.trim();
     const div = document.createElement('div');
     div.className = 'form-group';
-    div.innerHTML = `<label>${f.label}</label>`;
+    div.innerHTML = `<label class="form-label">${f.label}</label>`;
     if (f.type === 'select') {
       const sel = document.createElement('select');
+      sel.className = 'form-select';
       sel.dataset.key = f.key;
       f.options.forEach(o => {
         const opt = document.createElement('option');
@@ -349,7 +876,7 @@ function openEdit(type, rowId, btn) {
       });
       div.appendChild(sel);
     } else {
-      div.innerHTML += `<input type="${f.type}" data-key="${f.key}" value="${val}" />`;
+      div.innerHTML += `<input class="form-input" type="${f.type}" data-key="${f.key}" value="${val}" />`;
     }
     container.appendChild(div);
   });
@@ -359,29 +886,26 @@ function openEdit(type, rowId, btn) {
 
 function saveEdit() {
   if (!_editContext) return;
-  const { type, row, fields } = _editContext;
+  const { row, fields } = _editContext;
   const cells = row.querySelectorAll('td');
-  const inputs = document.querySelectorAll('#modal-fields input, #modal-fields select');
-  inputs.forEach(inp => {
+  document.querySelectorAll('#modal-fields input, #modal-fields select').forEach(inp => {
     const key = parseInt(inp.dataset.key);
     const val = inp.value.trim();
     if (key === 3) {
-      // update badge
       const badge = cells[key].querySelector('.badge');
       badge.textContent = val;
-      // update badge class
       badge.className = 'badge';
       if (val === 'Active' || val === 'Approved') badge.classList.add('badge-active');
       else if (val === 'Inactive' || val === 'Rejected') badge.classList.add('badge-inactive');
-      else badge.classList.add('badge-pending');
+      else badge.classList.add('badge-pending-yellow');
     } else {
       cells[key].textContent = val;
     }
   });
   closeModal('edit-modal');
+  showToast('Record updated successfully.');
 }
 
-// ===== DELETE =====
 let _deleteContext = null;
 
 function openDelete(rowId, tableId) {
@@ -395,26 +919,19 @@ function confirmDelete() {
   const row = table.querySelector(`tr[data-id="${_deleteContext.rowId}"]`);
   if (row) row.remove();
   closeModal('delete-modal');
+  showToast('Record deleted.');
   _deleteContext = null;
 }
 
-// ===== VERIFICATION ACTIONS =====
 function verifyAction(rowId, newStatus) {
   const row = document.querySelector(`#verification-table tr[data-id="${rowId}"]`);
   if (!row) return;
   const badge = row.querySelector('.badge');
   badge.textContent = newStatus;
   badge.className = 'badge';
-  if (newStatus === 'Approved') badge.classList.add('badge-approved');
-  else { badge.classList.add('badge-inactive'); }
+  badge.classList.add(newStatus === 'Approved' ? 'badge-approved' : 'badge-inactive');
+  showToast('Verification ' + newStatus.toLowerCase() + '.');
 }
-
-// Close modals on overlay click
-document.querySelectorAll('.modal-overlay').forEach(overlay => {
-  overlay.addEventListener('click', function(e) {
-    if (e.target === this) this.classList.remove('open');
-  });
-});
 </script>
 </body>
 </html>
