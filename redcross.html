@@ -1,366 +1,363 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Life Link – Dashboard</title>
-  <link rel="stylesheet" href="redcross.css" />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Life Link – Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --crimson:#9B1B0F;--crimson-dark:#6e1009;--crimson-mid:#C0392B;--red-bright:#E04535;
+  --red-soft:#fdecea;--blush:#fce8e6;--sidebar-bg:#7a1208;
+  --body-bg:#f5e8e6;--card-bg:#ffffff;--table-head:#fdecea;
+  --text-dark:#1c0a08;--text-mid:#5a2a24;--text-muted:#9e6a63;
+  --border:#f0c8c2;--border-soft:#f8deda;--white:#ffffff;
+  --radius:8px;--radius-lg:14px;--sidebar-w:224px;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--body-bg);color:var(--text-dark);display:flex;min-height:100vh;font-size:14px;line-height:1.5}
+.sidebar{width:var(--sidebar-w);min-width:var(--sidebar-w);height:100vh;position:sticky;top:0;background:var(--sidebar-bg);display:flex;flex-direction:column;overflow-y:auto}
+.logo{display:flex;align-items:center;gap:10px;padding:24px 18px 20px;font-family:'Playfair Display',serif;font-size:18px;color:#fff;letter-spacing:0.03em;border-bottom:1px solid rgba(255,255,255,0.1)}
+.nav{display:flex;flex-direction:column;gap:1px;padding:14px 10px;flex:1}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--radius);color:rgba(255,255,255,0.65);font-size:13px;cursor:pointer;text-decoration:none;transition:background 0.15s,color 0.15s}
+.nav-item:hover{background:rgba(255,255,255,0.12);color:#fff}
+.nav-item.active{background:rgba(255,255,255,0.18);color:#fff;font-weight:500}
+.logout{display:flex;align-items:center;gap:10px;margin:0 10px 16px;padding:9px 12px;border-radius:var(--radius);color:rgba(255,255,255,0.45);font-size:13px;text-decoration:none;transition:all 0.15s;border-top:1px solid rgba(255,255,255,0.1);padding-top:16px;margin-top:4px}
+.logout:hover{color:#fff;background:rgba(255,255,255,0.1)}
+.main{flex:1;padding:28px 30px;overflow-y:auto}
+.page{display:none}.page.active{display:block}
+.page-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:600;color:var(--crimson-dark);margin-bottom:22px;padding-bottom:14px;border-bottom:2px solid var(--border)}
+.stat-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+.stat-card{border-radius:var(--radius-lg);padding:18px 20px;display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden;color:#fff}
+.stat-card:nth-child(1){background:linear-gradient(135deg,#9B1B0F,#C0392B)}
+.stat-card:nth-child(2){background:linear-gradient(135deg,#b5230f,#d9442e)}
+.stat-card:nth-child(3){background:linear-gradient(135deg,#7a1208,#a01a0d)}
+.stat-card:nth-child(4){background:linear-gradient(135deg,#c44a1a,#e8683a)}
+.stat-card::after{content:'';position:absolute;right:-18px;bottom:-18px;width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,0.07)}
+.stat-value{font-size:30px;font-weight:600;line-height:1}
+.stat-label{font-size:11px;text-transform:uppercase;letter-spacing:0.06em;color:rgba(255,255,255,0.7)}
+.dashboard-grid{display:grid;grid-template-columns:1fr 300px;gap:16px}
+.card{background:var(--card-bg);border-radius:var(--radius-lg);border:1px solid var(--border-soft);padding:20px 22px}
+.card h2{font-size:13px;font-weight:600;color:var(--crimson);margin-bottom:16px;letter-spacing:0.04em;text-transform:uppercase}
+.bar-list{display:flex;flex-direction:column;gap:10px}
+.bar-row{display:flex;align-items:center;gap:10px}
+.blood-type{width:30px;font-size:12px;font-weight:700;color:var(--crimson);flex-shrink:0;text-align:right}
+.bar-track{flex:1;height:7px;background:var(--blush);border-radius:99px;overflow:hidden}
+.bar-fill{height:100%;background:linear-gradient(90deg,var(--crimson),var(--red-bright));border-radius:99px}
+.units{font-size:11.5px;color:var(--text-muted);width:50px;flex-shrink:0}
+.alert-item{padding:14px 16px;border-radius:var(--radius);background:linear-gradient(135deg,#fff0ef,#fde9e7);border-left:4px solid var(--crimson-mid)}
+.alert-item.urgent .alert-type{font-size:13px;font-weight:600;color:var(--crimson);margin-bottom:6px}
+.alert-names{font-size:12.5px;color:var(--text-mid);line-height:2}
+.table-card{padding:0;overflow:hidden}
+table{width:100%;border-collapse:collapse}
+th{font-size:11px;font-weight:600;color:var(--crimson);text-transform:uppercase;letter-spacing:0.06em;padding:12px 16px;background:var(--table-head);border-bottom:1px solid var(--border);text-align:left;white-space:nowrap}
+td{padding:12px 16px;border-bottom:1px solid #fce8e5;font-size:13.5px;color:var(--text-dark);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#fffaf9}
+.badge{display:inline-block;font-size:11px;font-weight:600;padding:3px 10px;border-radius:99px}
+.badge-green{background:#d1fae5;color:#065f46}
+.badge-red{background:#fee2e2;color:#991b1b}
+.badge-yellow{background:#fef3c7;color:#92400e}
+.action-btn{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;padding:5px 11px;border-radius:6px;border:1px solid var(--border);background:var(--white);cursor:pointer;transition:all 0.15s;color:var(--text-muted);margin-right:4px}
+.btn-edit:hover{border-color:var(--border);background:var(--blush);color:var(--crimson)}
+.btn-delete:hover{border-color:#fca5a5;background:#fee2e2;color:#b91c1c}
+.btn-accept:hover{border-color:#86efac;background:#dcfce7;color:#15803d}
+.btn-reject:hover{border-color:#fca5a5;background:#fee2e2;color:#b91c1c}
+.btn-approve:hover{border-color:#86efac;background:#dcfce7;color:#15803d}
+.btn-assign:hover{border-color:#93c5fd;background:#dbeafe;color:#1d4ed8}
+.btn-expiry:hover{border-color:var(--border);background:var(--blush);color:var(--crimson)}
+.btn-history:hover{border-color:#c4b5fd;background:#ede9fe;color:#7c3aed}
+.days-left-warning{color:var(--crimson-mid);font-weight:700;font-size:13px}
+.disease-expand-btn{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;padding:5px 12px;border-radius:6px;border:1.5px solid var(--crimson-mid);background:var(--blush);color:var(--crimson);cursor:pointer;transition:all 0.15s}
+.disease-expand-btn:hover{background:var(--crimson-mid);color:#fff}
+.disease-drawer{display:none}
+.disease-drawer.open{display:table-row}
+.disease-drawer>td{padding:0!important;border-bottom:2px solid var(--border)!important;background:var(--body-bg)!important}
+.disease-drawer>td:hover{background:var(--body-bg)!important}
+.disease-panel{padding:18px 20px;display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.dpanel{background:var(--card-bg);border-radius:var(--radius);border:1px solid var(--border-soft);overflow:hidden}
+.dpanel-header{background:linear-gradient(90deg,var(--crimson-dark),var(--crimson-mid));padding:9px 14px;font-size:11px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:#fff;display:flex;align-items:center;gap:7px}
+.dpanel-body{padding:4px 0}
+.disease-row{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;font-size:13px;border-bottom:1px solid #fce9e7}
+.disease-row:last-child{border-bottom:none}
+.disease-row-label{color:var(--text-dark)}
+.disease-row-label span{font-size:11px;color:var(--text-muted);display:block}
+.disease-val{font-size:12px;font-weight:600;padding:3px 10px;border-radius:99px;min-width:72px;text-align:center}
+.dv-neg{background:#d1fae5;color:#065f46}
+.dv-pos{background:#fee2e2;color:#991b1b}
+.dv-normal{background:#dbeafe;color:#1e40af}
+.dv-warn{background:#fef3c7;color:#92400e}
+.disease-input-wrap{display:flex;align-items:center;gap:6px}
+.disease-input-wrap input,.disease-input-wrap select{font-size:12px;border:1px solid var(--border);border-radius:6px;padding:4px 8px;color:var(--text-dark);background:#fff8f7;outline:none}
+.disease-input-wrap input:focus,.disease-input-wrap select:focus{border-color:var(--crimson-mid)}
+.disease-input-wrap input{width:78px}
+.gh-textarea{width:100%;font-size:12.5px;color:var(--text-dark);border:none;background:transparent;resize:none;outline:none;padding:8px 14px 10px;line-height:1.6;font-family:'DM Sans',sans-serif}
+.gh-textarea::placeholder{color:var(--text-muted)}
+.modal-overlay{position:fixed;inset:0;background:rgba(60,5,0,0.4);display:none;align-items:center;justify-content:center;z-index:200}
+.modal-overlay.open{display:flex}
+.modal{background:#fff;border-radius:var(--radius-lg);box-shadow:0 24px 64px rgba(120,10,0,0.18);width:480px;max-width:96vw;overflow:hidden}
+.modal-sm{width:380px}
+.modal-top{display:flex;align-items:center;gap:14px;padding:18px 20px;border-bottom:1px solid var(--border-soft)}
+.modal-icon-wrap{width:36px;height:36px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.modal-icon-wrap svg{width:18px;height:18px}
+.modal-icon-wrap.edit{background:var(--blush);color:var(--crimson)}
+.modal-icon-wrap.add{background:#d1fae5;color:#065f46}
+.modal-icon-wrap.assign{background:#dbeafe;color:#1d4ed8}
+.modal-icon-wrap.history{background:#ede9fe;color:#7c3aed}
+.modal-title-block{flex:1}
+.modal-title{font-size:15px;font-weight:600;color:var(--text-dark)}
+.modal-subtitle{font-size:12px;color:var(--text-muted)}
+.modal-close{background:none;border:none;font-size:16px;cursor:pointer;color:var(--text-muted);padding:4px;border-radius:4px}
+.modal-close:hover{background:var(--blush)}
+.modal-body{padding:18px 20px;display:flex;flex-direction:column;gap:14px}
+.form-group{display:flex;flex-direction:column;gap:5px}
+.form-label{font-size:12px;font-weight:500;color:var(--text-mid)}
+.form-input,.form-select{padding:9px 12px;border:1px solid var(--border);border-radius:var(--radius);font-size:13.5px;color:var(--text-dark);background:#fff8f7;outline:none;font-family:inherit;transition:border-color 0.15s}
+.form-input:focus,.form-select:focus{border-color:var(--crimson-mid)}
+.modal-footer{display:flex;gap:8px;justify-content:flex-end;padding:14px 20px;border-top:1px solid var(--border-soft)}
+.foot-btn{padding:8px 18px;border-radius:var(--radius);font-size:13.5px;font-weight:500;cursor:pointer;transition:all 0.15s;border:1px solid transparent;font-family:inherit}
+.foot-cancel{background:#fff;border-color:var(--border);color:var(--text-muted)}
+.foot-cancel:hover{background:var(--body-bg)}
+.foot-save{background:var(--crimson-mid);color:#fff}
+.foot-save:hover{background:var(--crimson)}
+.foot-danger{background:#dc2626;color:#fff}.foot-danger:hover{background:#b91c1c}
+.foot-delete-cancel{background:#fff;border-color:var(--border);color:var(--text-muted)}
+.foot-add{background:#15803d;color:#fff}
+.foot-assign{background:#1d4ed8;color:#fff}
+.confirm-body{padding:22px 24px 8px;text-align:center}
+.confirm-ring{width:58px;height:58px;border-radius:50%;background:#fee2e2;display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+.confirm-h{font-size:16px;font-weight:600;margin-bottom:6px}
+.confirm-p{font-size:13px;color:var(--text-muted);line-height:1.5}
+.confirm-footer{display:flex;gap:8px;justify-content:flex-end;padding:14px 20px}
+.units-wrap{display:flex;align-items:center;gap:8px}
+.units-btn{width:30px;height:30px;border-radius:50%;border:1px solid var(--border);background:#fff;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;color:var(--text-muted)}
+.units-btn:hover{background:var(--blush)}
+.units-val{width:70px;text-align:center;padding:6px 10px;border:1px solid var(--border);border-radius:var(--radius);background:#fff8f7}
+.history-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #fce8e6}
+.history-item:last-child{border-bottom:none}
+.h-line{width:3px;height:34px;border-radius:99px;flex-shrink:0}
+.h-date{font-size:12px;color:var(--text-muted);width:100px;flex-shrink:0}
+.h-type{font-size:13.5px;font-weight:500;flex:1}
+.h-badge{font-size:11px;background:var(--blush);color:var(--crimson);padding:3px 9px;border-radius:99px;font-weight:600}
+.toast{position:fixed;bottom:28px;right:28px;background:var(--crimson-dark);color:#fff;padding:10px 18px;border-radius:8px;font-size:13px;opacity:0;transform:translateY(8px);transition:all 0.25s;pointer-events:none;z-index:300}
+.toast.show{opacity:1;transform:translateY(0)}
+</style>
 </head>
 <body>
 
 <aside class="sidebar">
   <div class="logo">
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-      <path d="M14 2C14 2 8 7 8 14C8 17.31 10.69 20 14 20C17.31 20 20 17.31 20 14C20 7 14 2 14 2Z" fill="#C0392B"/>
-      <ellipse cx="14" cy="20" rx="4" ry="5" fill="#C0392B" opacity="0.5"/>
-    </svg>
-    <span>life link</span>
+    <svg width="26" height="26" viewBox="0 0 28 28" fill="none"><path d="M14 2C14 2 8 7 8 14C8 17.31 10.69 20 14 20C17.31 20 20 17.31 20 14C20 7 14 2 14 2Z" fill="#fff"/><ellipse cx="14" cy="20" rx="4" ry="5" fill="#fff" opacity="0.4"/></svg>
+    life link
   </div>
-
   <nav class="nav">
-    <a class="nav-item active" data-page="dashboard" onclick="showPage('dashboard',this)">
-      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-      Dashboard
-    </a>
-    <a class="nav-item" data-page="appointments" onclick="showPage('appointments',this)">
-      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-      Appointments
-    </a>
-    <a class="nav-item" data-page="bloodtesting" onclick="showPage('bloodtesting',this)">
-      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 3L15 3L15 13C15 16.314 12.314 19 9 19 5.686 19 3 16.314 3 13V3Z" transform="rotate(180,9,11)"/><line x1="12" y1="3" x2="12" y2="19"/></svg>
-      Blood Testing
-    </a>
-    <a class="nav-item" data-page="inventory" onclick="showPage('inventory',this)">
-      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="9" x2="9" y2="21"/></svg>
-      Inventory
-    </a>
-    <a class="nav-item" data-page="bloodrequest" onclick="showPage('bloodrequest',this)">
-      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 21C12 21 5 14 5 9C5 5.686 8.134 3 12 3C15.866 3 19 5.686 19 9C19 14 12 21 12 21Z"/><circle cx="12" cy="9" r="2" fill="none"/></svg>
-      Blood Request
-    </a>
-    <a class="nav-item" data-page="rareblood" onclick="showPage('rareblood',this)">
-      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4"/><circle cx="17" cy="17" r="4"/><path d="M17 15v2l1 1"/></svg>
-      Rare Blood Registry
-    </a>
-    <a class="nav-item" data-page="expire" onclick="showPage('expire',this)">
-      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-      Expire Monitoring
-    </a>
-    <a class="nav-item" data-page="donors" onclick="showPage('donors',this)">
-      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-      Donor Records
-    </a>
+    <a class="nav-item active" onclick="showPage('dashboard',this)"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</a>
+    <a class="nav-item" onclick="showPage('appointments',this)"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Appointments</a>
+    <a class="nav-item" onclick="showPage('bloodtesting',this)"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 3L15 3L15 13C15 16.314 12.314 19 9 19 5.686 19 3 16.314 3 13V3Z" transform="rotate(180,9,11)"/><line x1="12" y1="3" x2="12" y2="19"/></svg>Blood Testing</a>
+    <a class="nav-item" onclick="showPage('inventory',this)"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="9" x2="9" y2="21"/></svg>Inventory</a>
+    <a class="nav-item" onclick="showPage('bloodrequest',this)"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 21C12 21 5 14 5 9C5 5.686 8.134 3 12 3C15.866 3 19 5.686 19 9C19 14 12 21 12 21Z"/><circle cx="12" cy="9" r="2" fill="none"/></svg>Blood Request</a>
+    <a class="nav-item" onclick="showPage('rareblood',this)"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4"/><circle cx="17" cy="17" r="4"/><path d="M17 15v2l1 1"/></svg>Rare Blood Registry</a>
+    <a class="nav-item" onclick="showPage('expire',this)"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Expire Monitoring</a>
+    <a class="nav-item" onclick="showPage('donors',this)"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Donor Records</a>
   </nav>
-
-  <a class="logout" href="logout.html">
-    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-    Logout
-  </a>
+  <a class="logout" href="#"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Logout</a>
 </aside>
-
 
 <main class="main">
 
-  <!-- DASHBOARD -->
   <section class="page active" id="page-dashboard">
     <h1 class="page-title">Dashboard Overview</h1>
     <div class="stat-cards">
-      <div class="stat-card">
-        <div class="stat-icon"><svg width="28" height="28" fill="none" stroke="#C0392B" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
-        <div class="stat-value">122</div>
-        <div class="stat-label">Total Donors</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon"><svg width="28" height="28" fill="none" stroke="#C0392B" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
-        <div class="stat-value">200</div>
-        <div class="stat-label">All Blood Units</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon"><svg width="28" height="28" fill="none" stroke="#C0392B" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 21C12 21 5 14 5 9C5 5.686 8.134 3 12 3C15.866 3 19 5.686 19 9C19 14 12 21 12 21Z"/></svg></div>
-        <div class="stat-value">4</div>
-        <div class="stat-label">Total Requests</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon"><svg width="28" height="28" fill="none" stroke="#C0392B" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="12" y1="14" x2="12" y2="18"/><line x1="10" y1="16" x2="14" y2="16"/></svg></div>
-        <div class="stat-value">2</div>
-        <div class="stat-label">Expiring Soon</div>
-      </div>
+      <div class="stat-card"><div><svg width="24" height="24" fill="none" stroke="#fff" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="stat-value">122</div><div class="stat-label">Total Donors</div></div>
+      <div class="stat-card"><div><svg width="24" height="24" fill="none" stroke="#fff" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div><div class="stat-value">200</div><div class="stat-label">All Blood Units</div></div>
+      <div class="stat-card"><div><svg width="24" height="24" fill="none" stroke="#fff" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 21C12 21 5 14 5 9C5 5.686 8.134 3 12 3C15.866 3 19 5.686 19 9C19 14 12 21 12 21Z"/></svg></div><div class="stat-value">4</div><div class="stat-label">Total Requests</div></div>
+      <div class="stat-card"><div><svg width="24" height="24" fill="none" stroke="#fff" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="stat-value">2</div><div class="stat-label">Expiring Soon</div></div>
     </div>
     <div class="dashboard-grid">
-      <div class="card inventory-chart">
-        <h2>Blood Inventory By Type</h2>
-        <div class="bar-list">
-          <div class="bar-row"><span class="blood-type">A+</span><div class="bar-track"><div class="bar-fill" style="width:85%"></div></div><span class="units">17 Units</span></div>
-          <div class="bar-row"><span class="blood-type">B+</span><div class="bar-track"><div class="bar-fill" style="width:35%"></div></div><span class="units">7 Units</span></div>
-          <div class="bar-row"><span class="blood-type">A-</span><div class="bar-track"><div class="bar-fill" style="width:40%"></div></div><span class="units">8 Units</span></div>
-          <div class="bar-row"><span class="blood-type">AB+</span><div class="bar-track"><div class="bar-fill" style="width:20%"></div></div><span class="units">10 Units</span></div>
-          <div class="bar-row"><span class="blood-type">O+</span><div class="bar-track"><div class="bar-fill" style="width:50%"></div></div><span class="units">10 Units</span></div>
-          <div class="bar-row"><span class="blood-type">O-</span><div class="bar-track"><div class="bar-fill" style="width:50%"></div></div><span class="units">10 Units</span></div>
-          <div class="bar-row"><span class="blood-type">AB+</span><div class="bar-track"><div class="bar-fill" style="width:50%"></div></div><span class="units">10 Units</span></div>
-          <div class="bar-row"><span class="blood-type">AB-</span><div class="bar-track"><div class="bar-fill" style="width:50%"></div></div><span class="units">10 Units</span></div>
-        </div>
-      </div>
-      <div class="card rare-alert">
-        <h2>Rare Blood Alert</h2>
-        <div class="alert-item urgent">
-          <div class="alert-type">O- Urgent Needed</div>
-          <div class="alert-names">John Doe</div>
-          <div class="alert-names">Chakrapath</div>
-        </div>
-      </div>
+      <div class="card"><h2>Blood Inventory By Type</h2><div class="bar-list">
+        <div class="bar-row"><span class="blood-type">A+</span><div class="bar-track"><div class="bar-fill" style="width:85%"></div></div><span class="units">17 Units</span></div>
+        <div class="bar-row"><span class="blood-type">B+</span><div class="bar-track"><div class="bar-fill" style="width:35%"></div></div><span class="units">7 Units</span></div>
+        <div class="bar-row"><span class="blood-type">A-</span><div class="bar-track"><div class="bar-fill" style="width:40%"></div></div><span class="units">8 Units</span></div>
+        <div class="bar-row"><span class="blood-type">AB+</span><div class="bar-track"><div class="bar-fill" style="width:20%"></div></div><span class="units">10 Units</span></div>
+        <div class="bar-row"><span class="blood-type">O+</span><div class="bar-track"><div class="bar-fill" style="width:50%"></div></div><span class="units">10 Units</span></div>
+        <div class="bar-row"><span class="blood-type">O-</span><div class="bar-track"><div class="bar-fill" style="width:50%"></div></div><span class="units">10 Units</span></div>
+        <div class="bar-row"><span class="blood-type">AB-</span><div class="bar-track"><div class="bar-fill" style="width:30%"></div></div><span class="units">6 Units</span></div>
+      </div></div>
+      <div class="card"><h2>Rare Blood Alert</h2><div class="alert-item urgent"><div class="alert-type">O- Urgent Needed</div><div class="alert-names">John Doe</div><div class="alert-names">Chakrapath</div></div></div>
     </div>
   </section>
 
-  <!-- APPOINTMENTS -->
   <section class="page" id="page-appointments">
     <h1 class="page-title">Appointments</h1>
     <div class="card table-card">
       <table id="tbl-appointments">
-        <thead>
-          <tr><th>Donor Name</th><th>Blood Group</th><th>Requested Date</th><th>Last Donation</th><th>Status</th><th>Actions</th></tr>
-        </thead>
+        <thead><tr><th>Donor Name</th><th>Blood Group</th><th>Requested Date</th><th>Last Donation</th><th>Status</th><th>Actions</th></tr></thead>
         <tbody>
-          <tr data-id="a1">
-            <td>John Doe</td><td>B+</td><td>2026-04-05</td><td>2025-12-01</td>
-            <td><span class="badge badge-green">Scheduled</span></td>
-            <td>
-              <button class="action-btn btn-edit" title="Edit" onclick="openEdit('appointments','a1',this)">
-                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                Edit
-              </button>
-              <button class="action-btn btn-delete" title="Delete" onclick="openDelete('a1','tbl-appointments')">
-                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
-                Delete
-              </button>
-            </td>
-          </tr>
-          <tr data-id="a2">
-            <td>John Doe</td><td>B+</td><td>2026-04-05</td><td>2025-12-01</td>
-            <td><span class="badge badge-red">Pending</span></td>
-            <td>
-              <button class="action-btn btn-edit" title="Edit" onclick="openEdit('appointments','a2',this)">
-                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                Edit
-              </button>
-              <button class="action-btn btn-delete" title="Delete" onclick="openDelete('a2','tbl-appointments')">
-                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
-                Delete
-              </button>
-            </td>
-          </tr>
+          <tr data-id="a1"><td>John Doe</td><td>B+</td><td>2026-04-05</td><td>2025-12-01</td><td><span class="badge badge-green">Scheduled</span></td><td>
+            <button class="action-btn btn-edit" onclick="openEdit('appointments','a1',this)"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button>
+            <button class="action-btn btn-delete" onclick="openDelete('a1','tbl-appointments')"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg> Delete</button>
+          </td></tr>
+          <tr data-id="a2"><td>Jane Smith</td><td>O+</td><td>2026-04-05</td><td>2025-12-01</td><td><span class="badge badge-red">Pending</span></td><td>
+            <button class="action-btn btn-edit" onclick="openEdit('appointments','a2',this)"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button>
+            <button class="action-btn btn-delete" onclick="openDelete('a2','tbl-appointments')"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg> Delete</button>
+          </td></tr>
         </tbody>
       </table>
     </div>
   </section>
 
-  <!-- BLOOD TESTING -->
   <section class="page" id="page-bloodtesting">
     <h1 class="page-title">Blood Testing</h1>
     <div class="card table-card">
       <table id="tbl-bloodtesting">
-        <thead>
-          <tr><th>Donor Name</th><th>Claimed</th><th>Tested</th><th>HIV</th><th>Hepatitis</th><th>Hemoglobin</th><th>Action</th></tr>
-        </thead>
+        <thead><tr><th>Donor Name</th><th>Claimed</th><th>Tested</th><th>Disease Screening</th><th>Action</th></tr></thead>
         <tbody>
           <tr data-id="bt1">
-            <td>John Doe</td><td>A+</td><td>A+</td><td>Negative</td><td>Negative</td><td>14.5 g/dL</td>
+            <td><strong style="font-weight:500">John Doe</strong></td><td>A+</td><td>A+</td>
+            <td><button class="disease-expand-btn" onclick="toggleDisease('bt1')"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg> View Disease Panel</button></td>
             <td>
-              <button class="action-btn btn-accept" onclick="testingAction('bt1','Accepted')">
-                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-                Accept
-              </button>
-              <button class="action-btn btn-reject" onclick="testingAction('bt1','Rejected')">
-                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                Reject
-              </button>
+              <button class="action-btn btn-accept" onclick="testingAction('bt1','Accepted')"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Accept</button>
+              <button class="action-btn btn-reject" onclick="testingAction('bt1','Rejected')"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Reject</button>
             </td>
           </tr>
+          <tr class="disease-drawer" id="drawer-bt1"><td colspan="5"><div class="disease-panel">
+            <div class="dpanel"><div class="dpanel-header"><svg width="13" height="13" fill="none" stroke="#fff" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2C12 2 5 8.5 5 14a7 7 0 0 0 14 0C19 8.5 12 2 12 2z"/></svg>Hemoglobin Level</div><div class="dpanel-body">
+              <div class="disease-row"><div class="disease-row-label">Hemoglobin<span>Normal: 13.5–17.5 g/dL (M), 12–15.5 (F)</span></div><div class="disease-input-wrap"><input type="number" step="0.1" value="14.5" id="hb-bt1" onchange="updateHbBadge('bt1')"/><span style="font-size:11px;color:var(--text-muted)">g/dL</span><span class="disease-val dv-normal" id="hb-badge-bt1">Normal</span></div></div>
+            </div></div>
+            <div class="dpanel"><div class="dpanel-header"><svg width="13" height="13" fill="none" stroke="#fff" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>Infectious Diseases</div><div class="dpanel-body">
+              <div class="disease-row"><div class="disease-row-label">HIV</div><select class="disease-val" style="background:#d1fae5;color:#065f46;border:none;font-size:12px;padding:3px 8px;border-radius:99px;font-weight:600" onchange="updateSelectColor(this)"><option value="neg">Negative</option><option value="pos">Positive</option></select></div>
+              <div class="disease-row"><div class="disease-row-label">Hepatitis B</div><select class="disease-val" style="background:#d1fae5;color:#065f46;border:none;font-size:12px;padding:3px 8px;border-radius:99px;font-weight:600" onchange="updateSelectColor(this)"><option value="neg">Negative</option><option value="pos">Positive</option></select></div>
+              <div class="disease-row"><div class="disease-row-label">Hepatitis C</div><select class="disease-val" style="background:#d1fae5;color:#065f46;border:none;font-size:12px;padding:3px 8px;border-radius:99px;font-weight:600" onchange="updateSelectColor(this)"><option value="neg">Negative</option><option value="pos">Positive</option></select></div>
+              <div class="disease-row"><div class="disease-row-label">Syphilis</div><select class="disease-val" style="background:#d1fae5;color:#065f46;border:none;font-size:12px;padding:3px 8px;border-radius:99px;font-weight:600" onchange="updateSelectColor(this)"><option value="neg">Negative</option><option value="pos">Positive</option></select></div>
+              <div class="disease-row"><div class="disease-row-label">Malaria</div><select class="disease-val" style="background:#d1fae5;color:#065f46;border:none;font-size:12px;padding:3px 8px;border-radius:99px;font-weight:600" onchange="updateSelectColor(this)"><option value="neg">Negative</option><option value="pos">Positive</option></select></div>
+              <div class="disease-row"><div class="disease-row-label">Corona (COVID-19)</div><select class="disease-val" style="background:#d1fae5;color:#065f46;border:none;font-size:12px;padding:3px 8px;border-radius:99px;font-weight:600" onchange="updateSelectColor(this)"><option value="neg">Negative</option><option value="pos">Positive</option></select></div>
+            </div></div>
+            <div class="dpanel"><div class="dpanel-header"><svg width="13" height="13" fill="none" stroke="#fff" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Vital Signs</div><div class="dpanel-body">
+              <div class="disease-row"><div class="disease-row-label">Blood Pressure<span>Normal: 90/60–120/80 mmHg</span></div><div class="disease-input-wrap"><input type="text" value="118/76" style="width:76px"/><span style="font-size:11px;color:var(--text-muted)">mmHg</span></div></div>
+              <div class="disease-row"><div class="disease-row-label">Pulse Rate<span>Normal: 60–100 bpm</span></div><div class="disease-input-wrap"><input type="number" value="78" style="width:60px"/><span style="font-size:11px;color:var(--text-muted)">bpm</span></div></div>
+              <div class="disease-row"><div class="disease-row-label">Temperature<span>Normal: 36.1–37.2 °C</span></div><div class="disease-input-wrap"><input type="number" step="0.1" value="36.8" style="width:60px"/><span style="font-size:11px;color:var(--text-muted)">°C</span></div></div>
+            </div></div>
+            <div class="dpanel"><div class="dpanel-header"><svg width="13" height="13" fill="none" stroke="#fff" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22C12 22 4 17 4 10a8 8 0 0 1 16 0c0 7-8 12-8 12z"/></svg>Weight & General Health</div><div class="dpanel-body">
+              <div class="disease-row"><div class="disease-row-label">Weight<span>Minimum 50 kg to donate</span></div><div class="disease-input-wrap"><input type="number" value="68" style="width:60px"/><span style="font-size:11px;color:var(--text-muted)">kg</span></div></div>
+              <div class="disease-row" style="align-items:flex-start;flex-direction:column;gap:6px"><div class="disease-row-label" style="font-size:12px;font-weight:600;color:var(--crimson)">Donor Health Declaration<span style="font-weight:400;color:var(--text-muted)">Recent illness / surgery / tattoos / risky history</span></div><textarea class="gh-textarea" rows="3">No recent illness. Tattoo done 8 months ago. No recent surgery.</textarea></div>
+            </div></div>
+          </div></td></tr>
+
           <tr data-id="bt2">
-            <td>Jane Smith</td><td>O+</td><td>O+</td><td>Negative</td><td>Negative</td><td>13.2 g/dL</td>
+            <td><strong style="font-weight:500">Jane Smith</strong></td><td>O+</td><td>O+</td>
+            <td><button class="disease-expand-btn" onclick="toggleDisease('bt2')"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg> View Disease Panel</button></td>
             <td>
-              <button class="action-btn btn-accept" onclick="testingAction('bt2','Accepted')">
-                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-                Accept
-              </button>
-              <button class="action-btn btn-reject" onclick="testingAction('bt2','Rejected')">
-                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                Reject
-              </button>
+              <button class="action-btn btn-accept" onclick="testingAction('bt2','Accepted')"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Accept</button>
+              <button class="action-btn btn-reject" onclick="testingAction('bt2','Rejected')"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Reject</button>
             </td>
           </tr>
+          <tr class="disease-drawer" id="drawer-bt2"><td colspan="5"><div class="disease-panel">
+            <div class="dpanel"><div class="dpanel-header"><svg width="13" height="13" fill="none" stroke="#fff" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2C12 2 5 8.5 5 14a7 7 0 0 0 14 0C19 8.5 12 2 12 2z"/></svg>Hemoglobin Level</div><div class="dpanel-body">
+              <div class="disease-row"><div class="disease-row-label">Hemoglobin<span>Normal: 12–15.5 g/dL (female)</span></div><div class="disease-input-wrap"><input type="number" step="0.1" value="13.2" id="hb-bt2" onchange="updateHbBadge('bt2')"/><span style="font-size:11px;color:var(--text-muted)">g/dL</span><span class="disease-val dv-normal" id="hb-badge-bt2">Normal</span></div></div>
+            </div></div>
+            <div class="dpanel"><div class="dpanel-header"><svg width="13" height="13" fill="none" stroke="#fff" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>Infectious Diseases</div><div class="dpanel-body">
+              <div class="disease-row"><div class="disease-row-label">HIV</div><select class="disease-val" style="background:#d1fae5;color:#065f46;border:none;font-size:12px;padding:3px 8px;border-radius:99px;font-weight:600" onchange="updateSelectColor(this)"><option value="neg">Negative</option><option value="pos">Positive</option></select></div>
+              <div class="disease-row"><div class="disease-row-label">Hepatitis B</div><select class="disease-val" style="background:#d1fae5;color:#065f46;border:none;font-size:12px;padding:3px 8px;border-radius:99px;font-weight:600" onchange="updateSelectColor(this)"><option value="neg">Negative</option><option value="pos">Positive</option></select></div>
+              <div class="disease-row"><div class="disease-row-label">Hepatitis C</div><select class="disease-val" style="background:#d1fae5;color:#065f46;border:none;font-size:12px;padding:3px 8px;border-radius:99px;font-weight:600" onchange="updateSelectColor(this)"><option value="neg">Negative</option><option value="pos">Positive</option></select></div>
+              <div class="disease-row"><div class="disease-row-label">Syphilis</div><select class="disease-val" style="background:#d1fae5;color:#065f46;border:none;font-size:12px;padding:3px 8px;border-radius:99px;font-weight:600" onchange="updateSelectColor(this)"><option value="neg">Negative</option><option value="pos">Positive</option></select></div>
+              <div class="disease-row"><div class="disease-row-label">Malaria</div><select class="disease-val" style="background:#d1fae5;color:#065f46;border:none;font-size:12px;padding:3px 8px;border-radius:99px;font-weight:600" onchange="updateSelectColor(this)"><option value="neg">Negative</option><option value="pos">Positive</option></select></div>
+              <div class="disease-row"><div class="disease-row-label">Corona (COVID-19)</div><select class="disease-val" style="background:#d1fae5;color:#065f46;border:none;font-size:12px;padding:3px 8px;border-radius:99px;font-weight:600" onchange="updateSelectColor(this)"><option value="neg">Negative</option><option value="pos">Positive</option></select></div>
+            </div></div>
+            <div class="dpanel"><div class="dpanel-header"><svg width="13" height="13" fill="none" stroke="#fff" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Vital Signs</div><div class="dpanel-body">
+              <div class="disease-row"><div class="disease-row-label">Blood Pressure<span>Normal: 90/60–120/80 mmHg</span></div><div class="disease-input-wrap"><input type="text" value="112/70" style="width:76px"/><span style="font-size:11px;color:var(--text-muted)">mmHg</span></div></div>
+              <div class="disease-row"><div class="disease-row-label">Pulse Rate<span>Normal: 60–100 bpm</span></div><div class="disease-input-wrap"><input type="number" value="72" style="width:60px"/><span style="font-size:11px;color:var(--text-muted)">bpm</span></div></div>
+              <div class="disease-row"><div class="disease-row-label">Temperature<span>Normal: 36.1–37.2 °C</span></div><div class="disease-input-wrap"><input type="number" step="0.1" value="36.5" style="width:60px"/><span style="font-size:11px;color:var(--text-muted)">°C</span></div></div>
+            </div></div>
+            <div class="dpanel"><div class="dpanel-header"><svg width="13" height="13" fill="none" stroke="#fff" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22C12 22 4 17 4 10a8 8 0 0 1 16 0c0 7-8 12-8 12z"/></svg>Weight & General Health</div><div class="dpanel-body">
+              <div class="disease-row"><div class="disease-row-label">Weight<span>Minimum 50 kg to donate</span></div><div class="disease-input-wrap"><input type="number" value="55" style="width:60px"/><span style="font-size:11px;color:var(--text-muted)">kg</span></div></div>
+              <div class="disease-row" style="align-items:flex-start;flex-direction:column;gap:6px"><div class="disease-row-label" style="font-size:12px;font-weight:600;color:var(--crimson)">Donor Health Declaration<span style="font-weight:400;color:var(--text-muted)">Recent illness / surgery / tattoos / risky history</span></div><textarea class="gh-textarea" rows="3">No recent illness. Ear piercing 3 weeks ago — may need deferral review.</textarea></div>
+            </div></div>
+          </div></td></tr>
         </tbody>
       </table>
     </div>
   </section>
 
-  <!-- INVENTORY -->
   <section class="page" id="page-inventory">
     <h1 class="page-title">Inventory</h1>
     <div class="card table-card">
       <table id="tbl-inventory">
-        <thead>
-          <tr><th>Blood Group</th><th>Units Available</th><th>Storage Date</th><th>Expire Date</th><th>Actions</th></tr>
-        </thead>
+        <thead><tr><th>Blood Group</th><th>Units Available</th><th>Storage Date</th><th>Expire Date</th><th>Actions</th></tr></thead>
         <tbody>
-          <tr data-id="inv1">
-            <td>A+</td><td>45</td><td>2026-04-05</td><td>2025-12-01</td>
-            <td>
-              <button class="action-btn btn-accept" onclick="openAdd('inv1')">
-                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-                Add
-              </button>
-              <button class="action-btn btn-edit" onclick="openEdit('inventory','inv1',this)">
-                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                Update
-              </button>
-            </td>
-          </tr>
-          <tr data-id="inv2">
-            <td>B-</td><td>60</td><td>2026-04-05</td><td>2025-12-01</td>
-            <td>
-              <button class="action-btn btn-accept" onclick="openAdd('inv2')">
-                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-                Add
-              </button>
-              <button class="action-btn btn-edit" onclick="openEdit('inventory','inv2',this)">
-                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                Update
-              </button>
-            </td>
-          </tr>
+          <tr data-id="inv1"><td>A+</td><td>45</td><td>2026-04-05</td><td>2025-12-01</td><td>
+            <button class="action-btn btn-accept" onclick="openAdd('inv1')"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg> Add</button>
+            <button class="action-btn btn-edit" onclick="openEdit('inventory','inv1',this)"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Update</button>
+          </td></tr>
+          <tr data-id="inv2"><td>B-</td><td>60</td><td>2026-04-05</td><td>2025-12-01</td><td>
+            <button class="action-btn btn-accept" onclick="openAdd('inv2')"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg> Add</button>
+            <button class="action-btn btn-edit" onclick="openEdit('inventory','inv2',this)"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Update</button>
+          </td></tr>
         </tbody>
       </table>
     </div>
   </section>
 
-  <!-- BLOOD REQUEST -->
   <section class="page" id="page-bloodrequest">
     <h1 class="page-title">Blood Request</h1>
     <div class="card table-card">
       <table id="tbl-bloodrequest">
-        <thead>
-          <tr><th>Patient Name</th><th>Blood Group</th><th>Units</th><th>Status</th><th>Actions</th></tr>
-        </thead>
+        <thead><tr><th>Patient Name</th><th>Blood Group</th><th>Units</th><th>Status</th><th>Actions</th></tr></thead>
         <tbody>
-          <tr data-id="br1">
-            <td>John Doe</td><td>B+</td><td>2</td>
-            <td><span class="badge badge-yellow">Pending</span></td>
-            <td>
-              <button class="action-btn btn-approve" onclick="requestAction('br1','Approved')">
-                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-                Approve
-              </button>
-              <button class="action-btn btn-assign" onclick="openAssign('br1')">
-                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-                Assign
-              </button>
-            </td>
-          </tr>
-          <tr data-id="br2">
-            <td>Jane Smith</td><td>O+</td><td>3</td>
-            <td><span class="badge badge-yellow">Pending</span></td>
-            <td>
-              <button class="action-btn btn-approve" onclick="requestAction('br2','Approved')">
-                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-                Approve
-              </button>
-              <button class="action-btn btn-assign" onclick="openAssign('br2')">
-                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-                Assign
-              </button>
-            </td>
-          </tr>
+          <tr data-id="br1"><td>John Doe</td><td>B+</td><td>2</td><td><span class="badge badge-yellow">Pending</span></td><td>
+            <button class="action-btn btn-approve" onclick="requestAction('br1','Approved')"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Approve</button>
+            <button class="action-btn btn-assign" onclick="openAssign('br1')"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg> Assign</button>
+          </td></tr>
+          <tr data-id="br2"><td>Jane Smith</td><td>O+</td><td>3</td><td><span class="badge badge-yellow">Pending</span></td><td>
+            <button class="action-btn btn-approve" onclick="requestAction('br2','Approved')"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Approve</button>
+            <button class="action-btn btn-assign" onclick="openAssign('br2')"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg> Assign</button>
+          </td></tr>
         </tbody>
       </table>
     </div>
   </section>
 
-  <!-- RARE BLOOD -->
   <section class="page" id="page-rareblood">
     <h1 class="page-title">Rare Blood Registry</h1>
     <div class="card table-card">
       <table id="tbl-rareblood">
-        <thead>
-          <tr><th>Patient Name</th><th>Blood Group</th><th>Location</th><th>Contact</th><th>Availability</th></tr>
-        </thead>
+        <thead><tr><th>Patient Name</th><th>Blood Group</th><th>Location</th><th>Contact</th><th>Availability</th></tr></thead>
         <tbody>
-          <tr data-id="rb1">
-            <td>John Doe</td><td>AB-</td><td>Chakrapath</td><td>977 97654987</td>
-            <td><span class="badge badge-green">Available</span></td>
-          </tr>
-          <tr data-id="rb2">
-            <td>John Doe</td><td>O-</td><td>Chakrapath</td><td>977 97654987</td>
-            <td><span class="badge badge-green">Available</span></td>
-          </tr>
+          <tr data-id="rb1"><td>John Doe</td><td>AB-</td><td>Chakrapath</td><td>977 97654987</td><td><span class="badge badge-green">Available</span></td></tr>
+          <tr data-id="rb2"><td>Jane Smith</td><td>O-</td><td>Chakrapath</td><td>977 97654987</td><td><span class="badge badge-green">Available</span></td></tr>
         </tbody>
       </table>
     </div>
   </section>
 
-  <!-- EXPIRE MONITORING -->
   <section class="page" id="page-expire">
     <h1 class="page-title">Blood Expiry Monitoring</h1>
     <div class="card table-card">
       <table id="tbl-expire">
-        <thead>
-          <tr><th>Blood Group</th><th>Units</th><th>Expire Date</th><th>Days Left</th><th>Action</th></tr>
-        </thead>
+        <thead><tr><th>Blood Group</th><th>Units</th><th>Expire Date</th><th>Days Left</th><th>Action</th></tr></thead>
         <tbody>
-          <tr data-id="ex1">
-            <td>A+</td><td>3</td><td>2026-04-08</td>
-            <td><span class="days-left-warning">6 Days</span></td>
-            <td>
-              <button class="action-btn btn-expiry" onclick="removeExpiry('ex1','tbl-expire')">
-                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                Remove Expiry
-              </button>
-            </td>
-          </tr>
-          <tr data-id="ex2">
-            <td>O-</td><td>5</td><td>2026-04-15</td>
-            <td><span class="days-left-warning">13 Days</span></td>
-            <td>
-              <button class="action-btn btn-expiry" onclick="removeExpiry('ex2','tbl-expire')">
-                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                Remove Expiry
-              </button>
-            </td>
-          </tr>
+          <tr data-id="ex1"><td>A+</td><td>3</td><td>2026-04-08</td><td><span class="days-left-warning">6 Days</span></td><td>
+            <button class="action-btn btn-expiry" onclick="removeExpiry('ex1','tbl-expire')"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/></svg> Remove Expiry</button>
+          </td></tr>
+          <tr data-id="ex2"><td>O-</td><td>5</td><td>2026-04-15</td><td><span class="days-left-warning">13 Days</span></td><td>
+            <button class="action-btn btn-expiry" onclick="removeExpiry('ex2','tbl-expire')"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/></svg> Remove Expiry</button>
+          </td></tr>
         </tbody>
       </table>
     </div>
   </section>
 
-  <!-- DONORS -->
   <section class="page" id="page-donors">
     <h1 class="page-title">Donor Records</h1>
     <div class="card table-card">
       <table id="tbl-donors">
-        <thead>
-          <tr><th>Donor Name</th><th>Blood Group</th><th>Total Donation</th><th>Last Donation</th><th>Eligible</th><th>Actions</th></tr>
-        </thead>
+        <thead><tr><th>Donor Name</th><th>Blood Group</th><th>Total Donation</th><th>Last Donation</th><th>Eligible</th><th>Actions</th></tr></thead>
         <tbody>
-          <tr data-id="dn1">
-            <td>John Doe</td><td>A-</td><td>3</td><td>2026-04-08</td>
-            <td><span class="badge badge-green">Eligible</span></td>
-            <td>
-              <button class="action-btn btn-history" onclick="viewHistory('dn1')">
-                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
-                View History
-              </button>
-            </td>
-          </tr>
-          <tr data-id="dn2">
-            <td>Jane Smith</td><td>A-</td><td>3</td><td>2026-04-08</td>
-            <td><span class="badge badge-red">Not Eligible</span></td>
-            <td>
-              <button class="action-btn btn-history" onclick="viewHistory('dn2')">
-                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
-                View History
-              </button>
-            </td>
-          </tr>
+          <tr data-id="dn1"><td>John Doe</td><td>A-</td><td>3</td><td>2026-04-08</td><td><span class="badge badge-green">Eligible</span></td><td>
+            <button class="action-btn btn-history" onclick="viewHistory('dn1')"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg> View History</button>
+          </td></tr>
+          <tr data-id="dn2"><td>Jane Smith</td><td>A-</td><td>3</td><td>2026-04-08</td><td><span class="badge badge-red">Not Eligible</span></td><td>
+            <button class="action-btn btn-history" onclick="viewHistory('dn2')"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg> View History</button>
+          </td></tr>
         </tbody>
       </table>
     </div>
@@ -368,360 +365,89 @@
 
 </main>
 
-
-<!-- EDIT MODAL -->
 <div class="modal-overlay" id="edit-modal">
   <div class="modal">
-    <div class="modal-top">
-      <div class="modal-icon-wrap edit">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-      </div>
-      <div class="modal-title-block">
-        <div class="modal-title" id="edit-modal-title">Edit Record</div>
-        <div class="modal-subtitle">Update the details below</div>
-      </div>
-      <button class="modal-close" onclick="closeModal('edit-modal')">✕</button>
-    </div>
-    <div class="modal-body">
-      <div id="edit-modal-fields"></div>
-    </div>
-    <div class="modal-footer">
-      <button class="foot-btn foot-cancel" onclick="closeModal('edit-modal')">Cancel</button>
-      <button class="foot-btn foot-save" onclick="saveEdit()">Save Changes</button>
-    </div>
+    <div class="modal-top"><div class="modal-icon-wrap edit"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+    <div class="modal-title-block"><div class="modal-title" id="edit-modal-title">Edit Record</div><div class="modal-subtitle">Update the details below</div></div>
+    <button class="modal-close" onclick="closeModal('edit-modal')">✕</button></div>
+    <div class="modal-body"><div id="edit-modal-fields"></div></div>
+    <div class="modal-footer"><button class="foot-btn foot-cancel" onclick="closeModal('edit-modal')">Cancel</button><button class="foot-btn foot-save" onclick="saveEdit()">Save Changes</button></div>
   </div>
 </div>
 
-<!-- DELETE MODAL -->
 <div class="modal-overlay" id="delete-modal">
   <div class="modal modal-sm">
-    <div class="modal-top" style="border-bottom:none;padding-bottom:0;">
-      <div style="flex:1"></div>
-      <button class="modal-close" onclick="closeModal('delete-modal')">✕</button>
-    </div>
-    <div class="confirm-body">
-      <div class="confirm-ring">
-        <svg width="28" height="28" fill="none" stroke="#be123c" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
-      </div>
-      <div class="confirm-h">Delete this record?</div>
-      <div class="confirm-p">This action is permanent and cannot be undone. The record will be removed from the system.</div>
-    </div>
-    <div class="confirm-footer">
-      <button class="foot-btn foot-delete-cancel" onclick="closeModal('delete-modal')">Cancel</button>
-      <button class="foot-btn foot-danger" onclick="confirmDelete()">Yes, Delete</button>
-    </div>
+    <div class="modal-top" style="border-bottom:none;padding-bottom:0"><div style="flex:1"></div><button class="modal-close" onclick="closeModal('delete-modal')">✕</button></div>
+    <div class="confirm-body"><div class="confirm-ring"><svg width="26" height="26" fill="none" stroke="#dc2626" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></div>
+    <div class="confirm-h">Delete this record?</div><div class="confirm-p">This action is permanent and cannot be undone.</div></div>
+    <div class="confirm-footer"><button class="foot-btn foot-delete-cancel" onclick="closeModal('delete-modal')">Cancel</button><button class="foot-btn foot-danger" onclick="confirmDelete()">Yes, Delete</button></div>
   </div>
 </div>
 
-<!-- ADD MODAL -->
 <div class="modal-overlay" id="add-modal">
   <div class="modal modal-sm">
-    <div class="modal-top">
-      <div class="modal-icon-wrap add">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-      </div>
-      <div class="modal-title-block">
-        <div class="modal-title">Add Blood Units</div>
-        <div class="modal-subtitle">Increase inventory stock</div>
-      </div>
-      <button class="modal-close" onclick="closeModal('add-modal')">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="form-group">
-        <label class="form-label">Units to Add</label>
-        <div class="units-wrap">
-          <button class="units-btn" onclick="adjUnits(-1)">−</button>
-          <input class="units-val" id="add-units-input" type="number" min="1" value="1"/>
-          <button class="units-btn" onclick="adjUnits(1)">+</button>
-        </div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="foot-btn foot-cancel" onclick="closeModal('add-modal')">Cancel</button>
-      <button class="foot-btn foot-add" onclick="confirmAdd()">Add Units</button>
-    </div>
+    <div class="modal-top"><div class="modal-icon-wrap add"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg></div>
+    <div class="modal-title-block"><div class="modal-title">Add Blood Units</div><div class="modal-subtitle">Increase inventory stock</div></div>
+    <button class="modal-close" onclick="closeModal('add-modal')">✕</button></div>
+    <div class="modal-body"><div class="form-group"><label class="form-label">Units to Add</label><div class="units-wrap"><button class="units-btn" onclick="adjUnits(-1)">−</button><input class="units-val" id="add-units-input" type="number" min="1" value="1"/><button class="units-btn" onclick="adjUnits(1)">+</button></div></div></div>
+    <div class="modal-footer"><button class="foot-btn foot-cancel" onclick="closeModal('add-modal')">Cancel</button><button class="foot-btn foot-add" onclick="confirmAdd()">Add Units</button></div>
   </div>
 </div>
 
-<!-- ASSIGN MODAL -->
 <div class="modal-overlay" id="assign-modal">
   <div class="modal modal-sm">
-    <div class="modal-top">
-      <div class="modal-icon-wrap assign">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-      </div>
-      <div class="modal-title-block">
-        <div class="modal-title">Assign Donor</div>
-        <div class="modal-subtitle">Link a donor to this blood request</div>
-      </div>
-      <button class="modal-close" onclick="closeModal('assign-modal')">✕</button>
-    </div>
+    <div class="modal-top"><div class="modal-icon-wrap assign"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div>
+    <div class="modal-title-block"><div class="modal-title">Assign Donor</div><div class="modal-subtitle">Link a donor to this request</div></div>
+    <button class="modal-close" onclick="closeModal('assign-modal')">✕</button></div>
     <div class="modal-body">
-      <div class="form-group">
-        <label class="form-label">Donor Name</label>
-        <input type="text" class="form-input" id="assign-donor-input" placeholder="e.g. John Doe"/>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Notes (optional)</label>
-        <input type="text" class="form-input" id="assign-notes-input" placeholder="Any additional notes…"/>
-      </div>
+      <div class="form-group"><label class="form-label">Donor Name</label><input type="text" class="form-input" id="assign-donor-input" placeholder="e.g. John Doe"/></div>
+      <div class="form-group"><label class="form-label">Notes (optional)</label><input type="text" class="form-input" id="assign-notes-input" placeholder="Any additional notes…"/></div>
     </div>
-    <div class="modal-footer">
-      <button class="foot-btn foot-cancel" onclick="closeModal('assign-modal')">Cancel</button>
-      <button class="foot-btn foot-assign" onclick="confirmAssign()">Assign Donor</button>
-    </div>
+    <div class="modal-footer"><button class="foot-btn foot-cancel" onclick="closeModal('assign-modal')">Cancel</button><button class="foot-btn foot-assign" onclick="confirmAssign()">Assign Donor</button></div>
   </div>
 </div>
 
-<!-- HISTORY MODAL -->
 <div class="modal-overlay" id="history-modal">
   <div class="modal modal-sm">
-    <div class="modal-top">
-      <div class="modal-icon-wrap history">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
-      </div>
-      <div class="modal-title-block">
-        <div class="modal-title" id="history-modal-title">Donation History</div>
-        <div class="modal-subtitle">All recorded donations</div>
-      </div>
-      <button class="modal-close" onclick="closeModal('history-modal')">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="history-list" id="history-list"></div>
-    </div>
-    <div class="modal-footer">
-      <button class="foot-btn foot-cancel" onclick="closeModal('history-modal')">Close</button>
-    </div>
+    <div class="modal-top"><div class="modal-icon-wrap history"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg></div>
+    <div class="modal-title-block"><div class="modal-title" id="history-modal-title">Donation History</div><div class="modal-subtitle">All recorded donations</div></div>
+    <button class="modal-close" onclick="closeModal('history-modal')">✕</button></div>
+    <div class="modal-body"><div class="history-list" id="history-list"></div></div>
+    <div class="modal-footer"><button class="foot-btn foot-cancel" onclick="closeModal('history-modal')">Close</button></div>
   </div>
 </div>
 
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script>
-function showPage(pageId, el) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById('page-' + pageId).classList.add('active');
-  el.classList.add('active');
-}
-
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2600);
-}
-
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-
-document.querySelectorAll('.modal-overlay').forEach(o => {
-  o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); });
-});
-
-const editConfig = {
-  appointments: [
-    { label: 'Donor Name', col: 0, type: 'text' },
-    { label: 'Blood Group', col: 1, type: 'text' },
-    { label: 'Requested Date', col: 2, type: 'date' },
-    { label: 'Last Donation', col: 3, type: 'date' },
-    { label: 'Status', col: 4, type: 'select', options: ['Scheduled','Pending','Cancelled'], isBadge: true },
-  ],
-  inventory: [
-    { label: 'Blood Group', col: 0, type: 'text' },
-    { label: 'Units Available', col: 1, type: 'number' },
-    { label: 'Storage Date', col: 2, type: 'date' },
-    { label: 'Expire Date', col: 3, type: 'date' },
-  ],
-};
-
-const badgeClass = {
-  'Scheduled': 'badge-green', 'Pending': 'badge-red', 'Cancelled': 'badge-red',
-  'Approved': 'badge-green', 'Rejected': 'badge-red',
-};
-
-let _editCtx = null;
-
-function openEdit(type, rowId, btn) {
-  const row = btn.closest('tr');
-  const cells = row.querySelectorAll('td');
-  const fields = editConfig[type];
-  document.getElementById('edit-modal-title').textContent = 'Edit Record';
-  const container = document.getElementById('edit-modal-fields');
-  container.innerHTML = '';
-  fields.forEach(f => {
-    const cell = cells[f.col];
-    const val = f.isBadge ? cell.querySelector('.badge').textContent.trim() : cell.textContent.trim();
-    const div = document.createElement('div');
-    div.className = 'form-group';
-    div.innerHTML = `<label class="form-label">${f.label}</label>`;
-    if (f.type === 'select') {
-      const sel = document.createElement('select');
-      sel.className = 'form-select';
-      sel.dataset.col = f.col;
-      sel.dataset.isBadge = f.isBadge || false;
-      f.options.forEach(o => {
-        const opt = document.createElement('option');
-        opt.value = o; opt.textContent = o;
-        if (o === val) opt.selected = true;
-        sel.appendChild(opt);
-      });
-      div.appendChild(sel);
-    } else {
-      div.innerHTML += `<input class="form-input" type="${f.type}" data-col="${f.col}" value="${val}" />`;
-    }
-    container.appendChild(div);
-  });
-  _editCtx = { row };
-  document.getElementById('edit-modal').classList.add('open');
-}
-
-function saveEdit() {
-  if (!_editCtx) return;
-  const { row } = _editCtx;
-  const cells = row.querySelectorAll('td');
-  document.querySelectorAll('#edit-modal-fields input, #edit-modal-fields select').forEach(inp => {
-    const col = parseInt(inp.dataset.col);
-    const isBadge = inp.dataset.isBadge === 'true';
-    const val = inp.value.trim();
-    if (isBadge) {
-      const badge = cells[col].querySelector('.badge');
-      badge.textContent = val;
-      badge.className = 'badge ' + (badgeClass[val] || 'badge-yellow');
-    } else {
-      cells[col].textContent = val;
-    }
-  });
-  closeModal('edit-modal');
-  showToast('Record updated successfully.');
-}
-
-let _deleteCtx = null;
-
-function openDelete(rowId, tableId) {
-  _deleteCtx = { rowId, tableId };
-  document.getElementById('delete-modal').classList.add('open');
-}
-
-function confirmDelete() {
-  if (!_deleteCtx) return;
-  const tbl = document.getElementById(_deleteCtx.tableId);
-  const row = tbl.querySelector(`tr[data-id="${_deleteCtx.rowId}"]`);
-  if (row) row.remove();
-  closeModal('delete-modal');
-  showToast('Record deleted.');
-  _deleteCtx = null;
-}
-
-function testingAction(rowId, action) {
-  const row = document.querySelector(`#tbl-bloodtesting tr[data-id="${rowId}"]`);
-  if (!row) return;
-  const td = row.querySelector('td:last-child');
-  const badge = document.createElement('span');
-  badge.className = 'badge ' + (action === 'Accepted' ? 'badge-green' : 'badge-red');
-  badge.textContent = action;
-  td.innerHTML = '';
-  td.appendChild(badge);
-  showToast('Sample ' + action.toLowerCase() + '.');
-}
-
-function requestAction(rowId, status) {
-  const row = document.querySelector(`#tbl-bloodrequest tr[data-id="${rowId}"]`);
-  if (!row) return;
-  const badge = row.querySelector('.badge');
-  badge.textContent = status;
-  badge.className = 'badge ' + (status === 'Approved' ? 'badge-green' : 'badge-red');
-  showToast('Request ' + status.toLowerCase() + '.');
-}
-
-let _assignRowId = null;
-function openAssign(rowId) {
-  _assignRowId = rowId;
-  document.getElementById('assign-donor-input').value = '';
-  document.getElementById('assign-notes-input').value = '';
-  document.getElementById('assign-modal').classList.add('open');
-}
-function confirmAssign() {
-  const donor = document.getElementById('assign-donor-input').value.trim();
-  if (!donor) { showToast('Please enter a donor name.'); return; }
-  closeModal('assign-modal');
-  showToast('Assigned to ' + donor + '.');
-  _assignRowId = null;
-}
-
-let _addRowId = null;
-function openAdd(rowId) {
-  _addRowId = rowId;
-  document.getElementById('add-units-input').value = 1;
-  document.getElementById('add-modal').classList.add('open');
-}
-function adjUnits(d) {
-  const i = document.getElementById('add-units-input');
-  i.value = Math.max(1, (parseInt(i.value) || 1) + d);
-}
-function confirmAdd() {
-  const n = parseInt(document.getElementById('add-units-input').value);
-  if (!n || n < 1) { showToast('Enter a valid number.'); return; }
-  const row = document.querySelector(`#tbl-inventory tr[data-id="${_addRowId}"]`);
-  if (row) {
-    const unitCell = row.querySelectorAll('td')[1];
-    unitCell.textContent = parseInt(unitCell.textContent) + n;
-  }
-  closeModal('add-modal');
-  showToast(n + ' unit(s) added.');
-  _addRowId = null;
-}
-
-function removeExpiry(rowId, tableId) {
-  const tbl = document.getElementById(tableId);
-  const row = tbl.querySelector(`tr[data-id="${rowId}"]`);
-  if (row) row.remove();
-  showToast('Expiry record removed.');
-}
-
-const donorHistory = {
-  dn1: [
-    { date: 'Apr 08, 2026', units: 1, type: 'A-' },
-    { date: 'Oct 12, 2025', units: 1, type: 'A-' },
-    { date: 'Apr 20, 2025', units: 1, type: 'A-' },
-  ],
-  dn2: [
-    { date: 'Apr 08, 2026', units: 1, type: 'A-' },
-    { date: 'Aug 05, 2025', units: 1, type: 'A-' },
-    { date: 'Dec 01, 2024', units: 1, type: 'A-' },
-  ],
-};
-
-const historyLineColors = [
-  'linear-gradient(180deg,#7c3aed,#a78bfa)',
-  'linear-gradient(180deg,#a78bfa,#c4b5fd)',
-  'linear-gradient(180deg,#c4b5fd,#e9d5ff)',
-];
-
-function viewHistory(donorId) {
-  const row = document.querySelector(`#tbl-donors tr[data-id="${donorId}"]`);
-  const name = row ? row.querySelectorAll('td')[0].textContent : 'Donor';
-  document.getElementById('history-modal-title').textContent = name + ' — Donation History';
-  const list = document.getElementById('history-list');
-  list.innerHTML = '';
-  const records = donorHistory[donorId] || [];
-  if (records.length === 0) {
-    list.innerHTML = '<p style="color:#a78bfa;text-align:center;padding:18px 0">No history found.</p>';
-  } else {
-    records.forEach((r, i) => {
-      const div = document.createElement('div');
-      div.className = 'history-item';
-      div.innerHTML = `
-        <div class="h-line" style="background:${historyLineColors[i] || historyLineColors[2]}"></div>
-        <div class="h-date">${r.date}</div>
-        <div class="h-type">${r.type} Blood</div>
-        <span class="h-badge">${r.units} unit</span>
-      `;
-      list.appendChild(div);
-    });
-  }
-  document.getElementById('history-modal').classList.add('open');
-}
+function showPage(id,el){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));document.getElementById('page-'+id).classList.add('active');el.classList.add('active')}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600)}
+function closeModal(id){document.getElementById(id).classList.remove('open')}
+document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open')}));
+function toggleDisease(rowId){const d=document.getElementById('drawer-'+rowId);const open=d.classList.contains('open');document.querySelectorAll('.disease-drawer').forEach(x=>x.classList.remove('open'));if(!open)d.classList.add('open')}
+function updateSelectColor(sel){if(sel.value==='pos'){sel.style.background='#fee2e2';sel.style.color='#991b1b'}else{sel.style.background='#d1fae5';sel.style.color='#065f46'}}
+function updateHbBadge(rowId){const v=parseFloat(document.getElementById('hb-'+rowId).value);const b=document.getElementById('hb-badge-'+rowId);if(isNaN(v)){b.textContent='—';b.className='disease-val';return}if(v<12){b.textContent='Low';b.className='disease-val dv-pos'}else if(v>17.5){b.textContent='High';b.className='disease-val dv-warn'}else{b.textContent='Normal';b.className='disease-val dv-normal'}}
+const editConfig={appointments:[{label:'Donor Name',col:0,type:'text'},{label:'Blood Group',col:1,type:'text'},{label:'Requested Date',col:2,type:'date'},{label:'Last Donation',col:3,type:'date'},{label:'Status',col:4,type:'select',options:['Scheduled','Pending','Cancelled'],isBadge:true}],inventory:[{label:'Blood Group',col:0,type:'text'},{label:'Units Available',col:1,type:'number'},{label:'Storage Date',col:2,type:'date'},{label:'Expire Date',col:3,type:'date'}]};
+const badgeClass={Scheduled:'badge-green',Pending:'badge-red',Cancelled:'badge-red',Approved:'badge-green',Rejected:'badge-red'};
+let _editCtx=null;
+function openEdit(type,rowId,btn){const row=btn.closest('tr');const cells=row.querySelectorAll('td');const fields=editConfig[type];document.getElementById('edit-modal-title').textContent='Edit Record';const c=document.getElementById('edit-modal-fields');c.innerHTML='';fields.forEach(f=>{const cell=cells[f.col];const val=f.isBadge?cell.querySelector('.badge').textContent.trim():cell.textContent.trim();const div=document.createElement('div');div.className='form-group';div.innerHTML=`<label class="form-label">${f.label}</label>`;if(f.type==='select'){const sel=document.createElement('select');sel.className='form-select';sel.dataset.col=f.col;sel.dataset.isBadge=f.isBadge||false;f.options.forEach(o=>{const op=document.createElement('option');op.value=o;op.textContent=o;if(o===val)op.selected=true;sel.appendChild(op)});div.appendChild(sel)}else{div.innerHTML+=`<input class="form-input" type="${f.type}" data-col="${f.col}" value="${val}"/>`}c.appendChild(div)});_editCtx={row};document.getElementById('edit-modal').classList.add('open')}
+function saveEdit(){if(!_editCtx)return;const{row}=_editCtx;const cells=row.querySelectorAll('td');document.querySelectorAll('#edit-modal-fields input,#edit-modal-fields select').forEach(i=>{const col=parseInt(i.dataset.col);const isBadge=i.dataset.isBadge==='true';const val=i.value.trim();if(isBadge){const b=cells[col].querySelector('.badge');b.textContent=val;b.className='badge '+(badgeClass[val]||'badge-yellow')}else cells[col].textContent=val});closeModal('edit-modal');showToast('Record updated successfully.')}
+let _deleteCtx=null;
+function openDelete(rowId,tableId){_deleteCtx={rowId,tableId};document.getElementById('delete-modal').classList.add('open')}
+function confirmDelete(){if(!_deleteCtx)return;const tbl=document.getElementById(_deleteCtx.tableId);const row=tbl.querySelector(`tr[data-id="${_deleteCtx.rowId}"]`);if(row)row.remove();closeModal('delete-modal');showToast('Record deleted.');_deleteCtx=null}
+function testingAction(rowId,action){const row=document.querySelector(`#tbl-bloodtesting tr[data-id="${rowId}"]`);if(!row)return;const td=row.querySelector('td:last-child');const b=document.createElement('span');b.className='badge '+(action==='Accepted'?'badge-green':'badge-red');b.textContent=action;td.innerHTML='';td.appendChild(b);showToast('Sample '+action.toLowerCase()+'.')}
+function requestAction(rowId,status){const row=document.querySelector(`#tbl-bloodrequest tr[data-id="${rowId}"]`);if(!row)return;const b=row.querySelector('.badge');b.textContent=status;b.className='badge '+(status==='Approved'?'badge-green':'badge-red');showToast('Request '+status.toLowerCase()+'.')}
+let _assignRowId=null;
+function openAssign(rowId){_assignRowId=rowId;document.getElementById('assign-donor-input').value='';document.getElementById('assign-notes-input').value='';document.getElementById('assign-modal').classList.add('open')}
+function confirmAssign(){const d=document.getElementById('assign-donor-input').value.trim();if(!d){showToast('Please enter a donor name.');return}closeModal('assign-modal');showToast('Assigned to '+d+'.');_assignRowId=null}
+let _addRowId=null;
+function openAdd(rowId){_addRowId=rowId;document.getElementById('add-units-input').value=1;document.getElementById('add-modal').classList.add('open')}
+function adjUnits(d){const i=document.getElementById('add-units-input');i.value=Math.max(1,(parseInt(i.value)||1)+d)}
+function confirmAdd(){const n=parseInt(document.getElementById('add-units-input').value);if(!n||n<1){showToast('Enter a valid number.');return}const row=document.querySelector(`#tbl-inventory tr[data-id="${_addRowId}"]`);if(row){const c=row.querySelectorAll('td')[1];c.textContent=parseInt(c.textContent)+n}closeModal('add-modal');showToast(n+' unit(s) added.');_addRowId=null}
+function removeExpiry(rowId,tableId){const tbl=document.getElementById(tableId);const row=tbl.querySelector(`tr[data-id="${rowId}"]`);if(row)row.remove();showToast('Expiry record removed.')}
+const donorHistory={dn1:[{date:'Apr 08, 2026',units:1,type:'A-'},{date:'Oct 12, 2025',units:1,type:'A-'},{date:'Apr 20, 2025',units:1,type:'A-'}],dn2:[{date:'Apr 08, 2026',units:1,type:'A-'},{date:'Aug 05, 2025',units:1,type:'A-'},{date:'Dec 01, 2024',units:1,type:'A-'}]};
+const hColors=['linear-gradient(180deg,#9B1B0F,#C0392B)','linear-gradient(180deg,#C0392B,#e06050)','linear-gradient(180deg,#e06050,#fdecea)'];
+function viewHistory(donorId){const row=document.querySelector(`#tbl-donors tr[data-id="${donorId}"]`);const name=row?row.querySelectorAll('td')[0].textContent:'Donor';document.getElementById('history-modal-title').textContent=name+' — Donation History';const list=document.getElementById('history-list');list.innerHTML='';const records=donorHistory[donorId]||[];if(!records.length){list.innerHTML='<p style="color:var(--text-muted);text-align:center;padding:18px 0">No history found.</p>'}else records.forEach((r,i)=>{const d=document.createElement('div');d.className='history-item';d.innerHTML=`<div class="h-line" style="background:${hColors[i]||hColors[2]}"></div><div class="h-date">${r.date}</div><div class="h-type">${r.type} Blood</div><span class="h-badge">${r.units} unit</span>`;list.appendChild(d)});document.getElementById('history-modal').classList.add('open')}
 </script>
 </body>
 </html>
