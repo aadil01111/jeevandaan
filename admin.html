@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Life Link – Admin Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="admin.css"/>
+  <style>
+    /* ── Notification Bell ── */
+    .notif-bell-wrap {
+      position: relative;
+      margin-left: auto;
+      margin-right: 8px;
+    }
+    .notif-bell-btn {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      border: 1px solid var(--border-soft);
+      background: var(--white);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s;
+      position: relative;
+    }
+    .notif-bell-btn svg { width: 16px; height: 16px; stroke: var(--text-muted); fill: none; }
+    .notif-bell-btn:hover { background: var(--blush); border-color: var(--crimson-mid); }
+    .notif-bell-btn:hover svg { stroke: var(--crimson); }
+    .notif-badge {
+      position: absolute; top: -4px; right: -4px;
+      width: 17px; height: 17px;
+      background: var(--crimson-mid);
+      color: #fff;
+      border-radius: 50%;
+      font-size: 10px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      border: 2px solid #fff;
+      animation: badgePulse 2s infinite;
+    }
+    @keyframes badgePulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(192,57,43,0.4); }
+      50%      { box-shadow: 0 0 0 5px rgba(192,57,43,0); }
+    }
+
+    /* ── Notification Dropdown ── */
+    .notif-dropdown {
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      width: 360px;
+      background: #fff;
+      border-radius: 14px;
+      border: 1px solid var(--border-soft);
+      box-shadow: 0 20px 60px rgba(100,10,0,0.16);
+      z-index: 500;
+      display: none;
+      overflow: hidden;
+      animation: dropIn 0.22s ease;
+    }
+    @keyframes dropIn {
+      from { opacity:0; transform:translateY(-8px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    .notif-dropdown.open { display: block; }
+
+    .notif-header {
+      padding: 14px 18px 10px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--border-soft);
+    }
+    .notif-header-title { font-size: 14px; font-weight: 700; color: var(--text-dark); }
+    .notif-mark-all {
+      font-size: 11px; color: var(--crimson-mid); font-weight: 600;
+      cursor: pointer; background: none; border: none; font-family: inherit;
+      padding: 3px 8px; border-radius: 6px; transition: background 0.15s;
+    }
+    .notif-mark-all:hover { background: var(--blush); }
+
+    .notif-tabs {
+      display: flex; gap: 0;
+      border-bottom: 1px solid var(--border-soft);
+      padding: 0 18px;
+    }
+    .notif-tab {
+      font-size: 12px; font-weight: 500; color: var(--text-muted);
+      padding: 8px 12px; cursor: pointer;
+      border-bottom: 2px solid transparent; margin-bottom: -1px;
+      transition: all 0.15s; background: none; border-left: none; border-right: none; border-top: none;
+      font-family: inherit;
+    }
+    .notif-tab.active { color: var(--crimson); border-bottom-color: var(--crimson); font-weight: 600; }
+
+    .notif-list { max-height: 340px; overflow-y: auto; }
+    .notif-list::-webkit-scrollbar { width: 4px; }
+    .notif-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    .notif-item {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 12px 18px;
+      border-bottom: 1px solid #fdf0ee;
+      cursor: pointer;
+      transition: background 0.12s;
+      position: relative;
+    }
+    .notif-item:last-child { border-bottom: none; }
+    .notif-item:hover { background: #fffaf9; }
+    .notif-item.unread { background: #fff7f6; }
+    .notif-item.unread::before {
+      content: '';
+      position: absolute; left: 6px; top: 50%; transform: translateY(-50%);
+      width: 6px; height: 6px;
+      background: var(--crimson-mid);
+      border-radius: 50%;
+    }
+
+    .notif-icon {
+      width: 34px; height: 34px; border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .notif-icon svg { width: 15px; height: 15px; fill: none; stroke-width: 2; }
+    .notif-icon.ni-request  { background: #fef3c7; }
+    .notif-icon.ni-request svg { stroke: #92400e; }
+    .notif-icon.ni-approved { background: #d1fae5; }
+    .notif-icon.ni-approved svg { stroke: #065f46; }
+    .notif-icon.ni-rejected { background: #fee2e2; }
+    .notif-icon.ni-rejected svg { stroke: #991b1b; }
+    .notif-icon.ni-urgent   { background: #fee2e2; }
+    .notif-icon.ni-urgent svg { stroke: #dc2626; }
+    .notif-icon.ni-user     { background: var(--blush); }
+    .notif-icon.ni-user svg { stroke: var(--crimson); }
+    .notif-icon.ni-verify   { background: #ede9fe; }
+    .notif-icon.ni-verify svg { stroke: #7c3aed; }
+    .notif-icon.ni-system   { background: #dbeafe; }
+    .notif-icon.ni-system svg { stroke: #1d4ed8; }
+
+    .notif-content { flex: 1; min-width: 0; }
+    .notif-msg { font-size: 13px; color: var(--text-dark); line-height: 1.45; }
+    .notif-msg strong { font-weight: 600; }
+    .notif-time { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+
+    .notif-empty {
+      text-align: center; padding: 32px 24px;
+      color: var(--text-muted); font-size: 13px;
+    }
+    .notif-empty svg { width: 36px; height: 36px; stroke: var(--border); fill: none; display: block; margin: 0 auto 10px; }
+
+    .notif-footer {
+      padding: 10px 18px;
+      border-top: 1px solid var(--border-soft);
+      text-align: center;
+    }
+    .notif-see-all {
+      font-size: 12px; font-weight: 600; color: var(--crimson-mid);
+      cursor: pointer; background: none; border: none; font-family: inherit;
+      transition: color 0.15s;
+    }
+    .notif-see-all:hover { color: var(--crimson); }
+
+    /* ── Notification Page (full) ── */
+    .notif-page-header {
+      display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;
+    }
+    .notif-filter-row {
+      display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;
+    }
+    .nf-pill {
+      font-size: 12px; font-weight: 600;
+      padding: 5px 14px; border-radius: 99px;
+      border: 1.5px solid var(--border);
+      background: #fff; color: var(--text-muted);
+      cursor: pointer; transition: all 0.15s; font-family: inherit;
+    }
+    .nf-pill.active { background: var(--crimson-mid); color: #fff; border-color: var(--crimson-mid); }
+    .nf-pill:hover:not(.active) { border-color: var(--crimson-mid); color: var(--crimson); }
+
+    .notif-card {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-soft);
+      overflow: hidden;
+    }
+    .notif-full-item {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 16px 22px;
+      border-bottom: 1px solid #fdf0ee;
+      transition: background 0.12s;
+      position: relative;
+    }
+    .notif-full-item:last-child { border-bottom: none; }
+    .notif-full-item:hover { background: #fffaf9; }
+    .notif-full-item.unread { background: #fff7f6; }
+    .notif-full-item.unread::before {
+      content: '';
+      position: absolute; left: 8px; top: 50%; transform: translateY(-50%);
+      width: 7px; height: 7px;
+      background: var(--crimson-mid); border-radius: 50%;
+    }
+    .notif-full-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .notif-full-icon svg { width: 18px; height: 18px; fill: none; stroke-width: 2; }
+    .notif-full-content { flex: 1; }
+    .notif-full-msg { font-size: 13.5px; color: var(--text-dark); line-height: 1.5; }
+    .notif-full-msg strong { font-weight: 600; }
+    .notif-full-meta { display: flex; align-items: center; gap: 10px; margin-top: 5px; }
+    .notif-full-time { font-size: 11.5px; color: var(--text-muted); }
+    .notif-type-tag {
+      font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 99px;
+      text-transform: uppercase; letter-spacing: 0.06em;
+    }
+    .tag-urgent   { background: #fee2e2; color: #991b1b; }
+    .tag-request  { background: #fef3c7; color: #92400e; }
+    .tag-approved { background: #d1fae5; color: #065f46; }
+    .tag-rejected { background: #fee2e2; color: #991b1b; }
+    .tag-user     { background: var(--blush); color: var(--crimson); }
+    .tag-verify   { background: #ede9fe; color: #7c3aed; }
+    .tag-system   { background: #dbeafe; color: #1d4ed8; }
+
+    .notif-dismiss-btn {
+      background: none; border: none; cursor: pointer;
+      color: var(--text-muted); padding: 4px; border-radius: 6px;
+      transition: all 0.15s; font-size: 14px;
+    }
+    .notif-dismiss-btn:hover { background: var(--blush); color: var(--crimson); }
+
+    /* Header bar */
+    .main-header {
+      display: flex; align-items: center;
+      margin-bottom: 26px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid var(--border);
+    }
+    .main-header .page-title { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+  </style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="logo">
+    <div class="logo-icon">
+      <svg class="blood-drop" viewBox="0 0 24 24"><path d="M12 2C12 2 5 9.5 5 14a7 7 0 0 0 14 0C19 9.5 12 2 12 2z"/></svg>
+      <div class="plus-badge">+</div>
+    </div>
+    life link
+  </div>
+  <div class="sidebar-subtitle">Admin control panel</div>
+  <nav class="nav">
+    <button class="nav-item active" onclick="showPage('overview', this)">
+      <svg viewBox="0 0 24 24" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Overview
+    </button>
+    <button class="nav-item" onclick="showPage('manage-users', this)">
+      <svg viewBox="0 0 24 24" stroke-width="1.8"><circle cx="9" cy="7" r="4"/><path d="M2 21v-1a7 7 0 0 1 14 0v1"/><circle cx="19" cy="10" r="3"/><path d="M22 21v-1a4 4 0 0 0-5-3.87"/></svg>
+      Manage Users
+    </button>
+    <button class="nav-item" onclick="showPage('red-cross', this)">
+      <svg viewBox="0 0 24 24" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
+      Red Cross Centers
+    </button>
+    <button class="nav-item" onclick="showPage('manage-request', this)">
+      <svg viewBox="0 0 24 24" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+      Manage Request
+    </button>
+    <button class="nav-item" onclick="showPage('manage-donors', this)">
+      <svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M12 2C12 2 5 9.5 5 14a7 7 0 0 0 14 0C19 9.5 12 2 12 2z"/></svg>
+      Manage Donors
+    </button>
+    <button class="nav-item" onclick="showPage('verification', this)">
+      <svg viewBox="0 0 24 24" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="m9 12 2 2 4-4"/></svg>
+      Verification
+    </button>
+    <button class="nav-item" onclick="showPage('notifications', this)" id="nav-notifications">
+      <svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      Notifications
+      <span class="nav-notif-dot" id="nav-notif-dot">5</span>
+    </button>
+  </nav>
+  <div class="sidebar-logout">
+    <a href="logout.html" class="logout-btn">
+      <svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+      Logout
+    </a>
+  </div>
+</aside>
+
+<main class="main">
+
+  <!-- OVERVIEW -->
+  <section id="page-overview" class="page active">
+    <div class="main-header">
+      <h2 class="page-title">System Overview</h2>
+      <div class="notif-bell-wrap">
+        <button class="notif-bell-btn" onclick="toggleNotifDropdown()" id="bell-btn">
+          <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="notif-badge" id="bell-badge">5</span>
+        </button>
+        <div class="notif-dropdown" id="notif-dropdown">
+          <div class="notif-header">
+            <span class="notif-header-title">Notifications</span>
+            <button class="notif-mark-all" onclick="markAllRead()">Mark all read</button>
+          </div>
+          <div class="notif-tabs">
+            <button class="notif-tab active" onclick="filterDropdown('all',this)">All</button>
+            <button class="notif-tab" onclick="filterDropdown('urgent',this)">Urgent</button>
+            <button class="notif-tab" onclick="filterDropdown('request',this)">Requests</button>
+            <button class="notif-tab" onclick="filterDropdown('user',this)">Users</button>
+          </div>
+          <div class="notif-list" id="dropdown-list"></div>
+          <div class="notif-footer">
+            <button class="notif-see-all" onclick="showPage('notifications', document.getElementById('nav-notifications')); closeNotifDropdown()">View all notifications →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="stat-cards">
+      <div class="stat-card">
+        <div class="stat-icon"><svg viewBox="0 0 24 24" stroke-width="1.8"><circle cx="9" cy="7" r="4"/><path d="M2 21v-1a7 7 0 0 1 14 0v1"/><circle cx="19" cy="10" r="3"/><path d="M22 21v-1a4 4 0 0 0-5-3.87"/></svg></div>
+        <div class="stat-value">122</div><div class="stat-label">Total Users</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"><svg viewBox="0 0 24 24" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg></div>
+        <div class="stat-value">20</div><div class="stat-label">Red Cross Centers</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"><svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M12 2C12 2 5 9.5 5 14a7 7 0 0 0 14 0C19 9.5 12 2 12 2z"/></svg></div>
+        <div class="stat-value">4</div><div class="stat-label">Active Donors</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"><svg viewBox="0 0 24 24" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+        <div class="stat-value">2</div><div class="stat-label">Requests This Month</div>
+      </div>
+    </div>
+    <div class="overview-bottom">
+      <div class="overview-card">
+        <h3>System Activity</h3>
+        <div class="activity-item"><span>New user registrations today</span><span class="count">23</span></div>
+        <div class="activity-item"><span>Pending verifications</span><span class="count">45</span></div>
+        <div class="activity-item"><span>Active blood requests</span><span class="count">89</span></div>
+      </div>
+      <div class="overview-card">
+        <h3>Recent System Logs</h3>
+        <div class="log-item">New Red Cross center added: North District</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MANAGE USERS -->
+  <section id="page-manage-users" class="page">
+    <h2 class="page-title">Manage Users</h2>
+    <div class="table-card">
+      <table id="users-table">
+        <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Joined</th><th>Actions</th></tr></thead>
+        <tbody>
+          <tr data-id="u1"><td>John Doe</td><td>johnd@gmail.com</td><td>Users</td><td><span class="badge badge-active">Active</span></td><td>2026-01-15</td><td><button class="action-btn" onclick="openEdit('users','u1',this)"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button><button class="action-btn" onclick="openDelete('u1','users-table')"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg> Delete</button></td></tr>
+          <tr data-id="u2"><td>Jane Smith</td><td>janes@gmail.com</td><td>Users</td><td><span class="badge badge-inactive">Inactive</span></td><td>2026-01-15</td><td><button class="action-btn" onclick="openEdit('users','u2',this)"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button><button class="action-btn" onclick="openDelete('u2','users-table')"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg> Delete</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- RED CROSS CENTERS -->
+  <section id="page-red-cross" class="page">
+    <h2 class="page-title">Red Cross Centers</h2>
+    <div class="table-card">
+      <table id="redcross-table">
+        <thead><tr><th>Center Name</th><th>Location</th><th>Contact</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody>
+          <tr data-id="rc1"><td>Central Red Cross Center</td><td>Bhaktapur</td><td>9987668450</td><td><span class="badge badge-active">Active</span></td><td><button class="action-btn" onclick="openEdit('redcross','rc1',this)"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button><button class="action-btn" onclick="openDelete('rc1','redcross-table')"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg> Delete</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- MANAGE REQUEST -->
+  <section id="page-manage-request" class="page">
+    <h2 class="page-title">Manage Request</h2>
+    <div class="table-card">
+      <table id="request-table">
+        <thead><tr><th>Patient</th><th>Blood Group</th><th>Units</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+        <tbody>
+          <tr data-id="r1"><td>Emma Davis</td><td>A+</td><td>1</td><td><span class="badge badge-active">Approved</span></td><td>2026-04-02</td><td><button class="action-btn" onclick="openEdit('request','r1',this)"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button><button class="action-btn" onclick="openDelete('r1','request-table')"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg> Delete</button></td></tr>
+          <tr data-id="r2"><td>Emma Davis</td><td>A+</td><td>1</td><td><span class="badge badge-pending">Pending</span></td><td>2026-04-02</td><td><button class="action-btn" onclick="openEdit('request','r2',this)"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button><button class="action-btn" onclick="openDelete('r2','request-table')"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg> Delete</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- MANAGE DONORS -->
+  <section id="page-manage-donors" class="page">
+    <h2 class="page-title">Manage Donors</h2>
+    <div class="table-card">
+      <table id="donors-table">
+        <thead><tr><th>Name</th><th>Blood Group</th><th>Total Donation</th><th>Status</th><th>Last Donation</th><th>Actions</th></tr></thead>
+        <tbody>
+          <tr data-id="d1"><td>John Doe</td><td>B+</td><td>8</td><td><span class="badge badge-active">Active</span></td><td>2026-01-15</td><td><button class="action-btn" onclick="openEdit('donors','d1',this)"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button><button class="action-btn" onclick="openDelete('d1','donors-table')"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg> Delete</button></td></tr>
+          <tr data-id="d2"><td>Jane Smith</td><td>A+</td><td>4</td><td><span class="badge badge-inactive">Inactive</span></td><td>2026-01-15</td><td><button class="action-btn" onclick="openEdit('donors','d2',this)"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button><button class="action-btn" onclick="openDelete('d2','donors-table')"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg> Delete</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- VERIFICATION -->
+  <section id="page-verification" class="page">
+    <h2 class="page-title">Verification</h2>
+    <div class="table-card">
+      <table id="verification-table">
+        <thead><tr><th>Name</th><th>Type</th><th>Status</th><th>Submitted</th><th>Actions</th></tr></thead>
+        <tbody>
+          <tr data-id="v1"><td>John Doe</td><td>ID Verification</td><td><span class="badge badge-pending">Pending</span></td><td>2026-01-15</td><td><button class="btn-pill btn-pill-accept" onclick="verifyAction('v1','Approved')">Accept</button><button class="btn-pill btn-pill-reject" onclick="verifyAction('v1','Rejected')">Reject</button></td></tr>
+          <tr data-id="v2"><td>Jane Smith</td><td>Donor Certificate</td><td><span class="badge badge-active">Approved</span></td><td>2026-01-15</td><td><button class="btn-pill btn-pill-accept" onclick="verifyAction('v2','Approved')">Accept</button><button class="btn-pill btn-pill-reject" onclick="verifyAction('v2','Rejected')">Reject</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- NOTIFICATIONS PAGE -->
+  <section id="page-notifications" class="page">
+    <div class="notif-page-header">
+      <h2 class="page-title" style="margin-bottom:0;padding-bottom:0;border-bottom:none">Notifications</h2>
+      <button class="foot-btn foot-save" onclick="markAllRead()" style="font-size:12px;padding:7px 16px">Mark all as read</button>
+    </div>
+    <div class="notif-filter-row" id="page-filter-row">
+      <button class="nf-pill active" onclick="filterPage('all',this)">All <span id="pf-all-count" style="opacity:0.7"></span></button>
+      <button class="nf-pill" onclick="filterPage('urgent',this)"> Urgent</button>
+      <button class="nf-pill" onclick="filterPage('request',this)"> Requests</button>
+      <button class="nf-pill" onclick="filterPage('approved',this)"> Approved</button>
+      <button class="nf-pill" onclick="filterPage('rejected',this)">Rejected</button>
+      <button class="nf-pill" onclick="filterPage('user',this)"> Users</button>
+      <button class="nf-pill" onclick="filterPage('verify',this)"> Verification</button>
+      <button class="nf-pill" onclick="filterPage('system',this)"> System</button>
+    </div>
+    <div class="notif-card" id="page-notif-list"></div>
+  </section>
+
+</main>
+
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="edit-modal">
+  <div class="modal"><div class="modal-top">
+    <div class="modal-icon-wrap"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+    <div class="modal-title-block"><div class="modal-title" id="modal-title">Edit Record</div><div class="modal-subtitle">Update the details below</div></div>
+    <button class="modal-close" onclick="closeModal('edit-modal')">✕</button>
+  </div>
+  <div class="modal-body"><div id="modal-fields"></div></div>
+  <div class="modal-footer"><button class="foot-btn foot-cancel" onclick="closeModal('edit-modal')">Cancel</button><button class="foot-btn foot-save" onclick="saveEdit()">Save Changes</button></div>
+  </div>
+</div>
+
+<!-- DELETE MODAL -->
+<div class="modal-overlay" id="delete-modal">
+  <div class="modal" style="width:360px"><div class="modal-top" style="border-bottom:none;padding-bottom:0"><div style="flex:1"></div><button class="modal-close" onclick="closeModal('delete-modal')">✕</button></div>
+  <div class="confirm-body"><div class="confirm-ring"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></div>
+  <div class="confirm-h">Delete this record?</div><div class="confirm-p">This action is permanent and cannot be undone.</div></div>
+  <div class="confirm-footer"><button class="foot-btn foot-cancel" onclick="closeModal('delete-modal')">Cancel</button><button class="foot-btn foot-danger" onclick="confirmDelete()">Yes, Delete</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<style>
+  .nav-notif-dot {
+    margin-left: auto;
+    background: var(--crimson-mid); color: #fff;
+    font-size: 10px; font-weight: 700;
+    min-width: 18px; height: 18px;
+    border-radius: 99px;
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 0 5px;
+  }
+</style>
+
+<script src="admin.js"></script>
+
+</body>
+</html>

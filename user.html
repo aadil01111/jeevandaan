@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Life Link – User Dashboard</title>
+  <link rel="stylesheet" href="user.css" />
+</head>
+<body>
+
+  <aside class="sidebar">
+    <a href="#" class="logo">
+      <div class="logo-icon">
+        <svg class="blood-drop" viewBox="0 0 24 24"><path d="M12 2C12 2 5 9.5 5 14a7 7 0 0014 0C19 9.5 12 2 12 2z"/></svg>
+        <div class="plus-dot">+</div>
+      </div>
+      life link
+    </a>
+
+    <a href="#" class="nav-item active" onclick="switchView('dashboard', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </a>
+    <a href="#" class="nav-item" onclick="switchView('notifications', this)" id="user-nav-notif">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      Notifications
+      <span class="nav-notif-dot" id="user-nav-dot">3</span>
+    </a>
+
+    <div class="sidebar-spacer"></div>
+
+    <a href="logout.html" class="nav-item logout">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Logout
+    </a>
+  </aside>
+
+  <main class="main">
+
+    <!-- DASHBOARD VIEW -->
+    <div id="view-dashboard">
+      <div class="dash-header">
+        <div>
+          <h1 class="page-title">Welcome Back, <span id="display-firstname">User</span>!</h1>
+          <p class="page-subtitle">Thank you for being a life-saver</p>
+        </div>
+        <div class="notif-bell-wrap">
+          <button class="notif-bell-btn" onclick="toggleUserDropdown()">
+            <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="notif-badge" id="user-bell-badge">3</span>
+          </button>
+          <div class="notif-dropdown" id="user-notif-dropdown">
+            <div class="nd-header">
+              <span class="nd-title">Notifications</span>
+              <button class="nd-mark-all" onclick="userMarkAll()">Mark all read</button>
+            </div>
+            <div class="nd-list" id="user-dd-list"></div>
+            <div class="nd-footer">
+              <button class="nd-see-all" onclick="switchView('notifications', document.getElementById('user-nav-notif')); closeUserDropdown()">View all notifications →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Profile Card -->
+      <div class="profile-card">
+        <div class="profile-top">
+          <div class="avatar">
+            <svg viewBox="0 0 24 24" stroke-width="1.5" fill="none" stroke="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke-linecap="round"/></svg>
+          </div>
+          <div>
+            <div class="profile-name" id="display-fullname">Loading...</div>
+            <div class="profile-email" id="display-email">...</div>
+          </div>
+        </div>
+        <div class="stats">
+          <div class="stat-box"><div class="stat-label">Blood Group</div><div class="stat-value" id="display-bloodgroup">-</div></div>
+          <div class="stat-box"><div class="stat-label">Total Donations</div><div class="stat-value" id="display-donations">0</div></div>
+          <div class="stat-box"><div class="stat-label">Verification Status</div><div class="stat-value"><div class="verified-icon"><svg viewBox="0 0 24 24" stroke-width="3" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></div>Verified</div></div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="actions">
+        <button class="action-btn inactive" id="donateBtn" onclick="selectTab('donate')">
+          <svg viewBox="0 0 24 24" stroke-width="1.8" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+          <span class="btn-label">Donate Blood</span>
+          <span class="btn-sub">Register yourself as a blood donor</span>
+        </button>
+        <button class="action-btn inactive" id="requestBtn" onclick="selectTab('request')">
+          <svg viewBox="0 0 24 24" stroke-width="1.8" fill="none" stroke="currentColor"><path d="M12 2C12 2 5 9.5 5 14a7 7 0 0014 0C19 9.5 12 2 12 2z"/></svg>
+          <span class="btn-label">Request Blood</span>
+          <span class="btn-sub">Submit a blood request for yourself or others</span>
+        </button>
+      </div>
+
+      <!-- Donor Form -->
+      <div class="form-card" id="donorForm">
+        <div class="form-title">Blood Donation Registration</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Blood Group</label>
+            <select id="donorBloodGroup" onchange="handleDonorBloodGroupChange()">
+              <option value="">Select Blood Group</option>
+              <option>A+</option>
+              <option>A-</option>
+              <option>B+</option>
+              <option>B-</option>
+              <option>O+</option>
+              <option>O-</option>
+              <option>AB+</option>
+              <option>AB-</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Your Location</label>
+            <input type="text" id="donorLocation" placeholder="Enter city or area" oninput="enforceTextOnly(this)">
+          </div>
+          <div class="form-group">
+            <label>Age</label>
+            <input type="number" id="donorAge" placeholder="Enter your age">
+            <span class="field-hint">Must be 18 years or older</span>
+          </div>
+          <div class="form-group">
+            <label>Weight (kg)</label>
+            <input type="number" id="donorWeight" placeholder="Enter weight in kg">
+            <span class="field-hint">Minimum 45 kg required</span>
+          </div>
+          <div class="form-group">
+            <label>Last Donation Date <span class="optional-tag">Optional</span></label>
+            <input type="date" id="donorLastDate">
+          </div>
+          <div class="form-group">
+            <label>Units to Donate (ml)</label>
+            <input type="number" id="donorUnits" placeholder="400 – 500 ml">
+            <span class="field-hint">Between 400 ml and 500 ml</span>
+          </div>
+        </div>
+        <button class="submit-btn" type="button" onclick="submitDonorFormU()">Register</button>
+      </div>
+
+      <!-- Request Form -->
+      <div class="form-card" id="requestForm">
+        <div class="form-title">Blood Request</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Blood Group Needed</label>
+            <select id="requestBloodGroup" onchange="handleRequestBloodGroupChange()">
+              <option value="">Select Blood Group</option>
+              <option>A+</option>
+              <option>A-</option>
+              <option>B+</option>
+              <option>B-</option>
+              <option>O+</option>
+              <option>O-</option>
+              <option>AB+</option>
+              <option>AB-</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Hospital / Location</label>
+            <input type="text" id="requestLocation" placeholder="Enter hospital name" oninput="enforceTextOnly(this)">
+          </div>
+          <div class="form-group">
+            <label>Date Needed</label>
+            <input type="date" id="requestDate">
+          </div>
+          <div class="form-group">
+            <label>Units Required (ml)</label>
+            <input type="number" id="requestUnits" placeholder="400 – 2000 ml">
+            <span class="field-hint">Between 400 ml and 2000 ml</span>
+          </div>
+          <div class="form-group" style="grid-column: 1 / -1">
+            <label>Urgency Level</label>
+            <select id="requestUrgency">
+              <option value="">Select Urgency Level</option>
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+            </select>
+          </div>
+        </div>
+        <button class="submit-btn" type="button" onclick="submitRequestFormU()">Submit Request</button>
+      </div>
+
+      <!-- Nearby Centers -->
+      <div class="nearby-card">
+        <div class="nearby-title">
+          <svg viewBox="0 0 24 24" stroke-width="1.8" fill="none" stroke="currentColor"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+          Nearby Red Cross Centers
+        </div>
+        <div class="center-item">
+          <div class="center-name">Central Red Cross</div>
+          <div class="center-info"><svg viewBox="0 0 24 24" stroke-width="2" fill="none" stroke="currentColor"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Chakrapath, Kathmandu</div>
+          <div class="center-info"><svg viewBox="0 0 24 24" stroke-width="2" fill="none" stroke="currentColor"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 010 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg><a href="tel:+977-1-4228094">+977-1-4228094</a></div>
+        </div>
+        <div class="center-item">
+          <div class="center-name">Nepal Red Cross Society HQ</div>
+          <div class="center-info"><svg viewBox="0 0 24 24" stroke-width="2" fill="none" stroke="currentColor"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Kalimati, Kathmandu</div>
+          <div class="center-info"><svg viewBox="0 0 24 24" stroke-width="2" fill="none" stroke="currentColor"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 010 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg><a href="tel:+977-1-4270650">+977-1-4270650</a></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NOTIFICATIONS VIEW -->
+    <div id="view-notifications" style="display: none">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px">
+        <h1 class="page-title" style="margin-bottom: 0">My Notifications</h1>
+        <button class="submit-btn" style="padding: 8px 18px; font-size: 12px" onclick="userMarkAll()">Mark all read</button>
+      </div>
+      <p class="page-subtitle">Stay updated on your blood requests and donations</p>
+
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px" id="user-filter-row">
+        <button class="uf-pill active" onclick="userFilterPage('all', this)">All</button>
+        <button class="uf-pill" onclick="userFilterPage('approved', this)">Approved</button>
+        <button class="uf-pill" onclick="userFilterPage('rejected', this)">Rejected</button>
+        <button class="uf-pill" onclick="userFilterPage('pending', this)">Pending</button>
+        <button class="uf-pill" onclick="userFilterPage('urgent', this)">Urgent</button>
+        <button class="uf-pill" onclick="userFilterPage('info', this)">Updates</button>
+      </div>
+
+      <div class="notif-panel visible" id="user-notif-panel" style="padding: 20px 22px"></div>
+    </div>
+
+  </main>
+
+  <!-- Rare Blood Modal – Donor -->
+  <div class="rare-modal-overlay" id="rareDonorModal">
+    <div class="rare-modal">
+      <div class="rare-modal-header">
+        <button class="rare-modal-close" onclick="closeRareDonorModal()">✕</button>
+        <div class="rare-modal-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2C12 2 5 9.5 5 14a7 7 0 0014 0C19 9.5 12 2 12 2z"/></svg>
+        </div>
+        <div class="rare-blood-badge">
+          <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+          Rare Blood Type: <span id="rareDonorBadgeText"></span>
+        </div>
+        <div class="rare-modal-title">Rare Blood Donor Registration</div>
+        <div class="rare-modal-sub">Your blood type is exceptionally rare. Please provide a contact number so we can reach you when your blood is critically needed.</div>
+      </div>
+      <div class="rare-modal-body">
+        <div class="rare-info-box">
+          <div class="rare-info-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+          <div class="rare-info-text"><strong id="rareDonorBloodText"></strong> is a rare blood type. Donors with this blood type are critical to saving lives. Your contact will only be used in medical emergencies.</div>
+        </div>
+        <div class="rare-form-group">
+          <label class="rare-form-label">Contact Number *</label>
+          <input type="tel" class="rare-input phone" id="rareDonorContact" placeholder="+977 98XXXXXXXX">
+          <span class="rare-field-error" id="rareDonorContactError">Please enter a valid contact number.</span>
+        </div>
+      </div>
+      <div class="rare-modal-footer">
+        <button class="rare-btn-submit" onclick="submitRareContact('donor')">Save Contact</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rare Blood Modal – Request -->
+  <div class="rare-modal-overlay" id="rareRequestModal">
+    <div class="rare-modal">
+      <div class="rare-modal-header">
+        <button class="rare-modal-close" onclick="closeRareRequestModal()">✕</button>
+        <div class="rare-modal-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2C12 2 5 9.5 5 14a7 7 0 0014 0C19 9.5 12 2 12 2z"/></svg>
+        </div>
+        <div class="rare-blood-badge">
+          <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+          Rare Blood Type: <span id="rareRequestBadgeText"></span>
+        </div>
+        <div class="rare-modal-title">Rare Blood Request</div>
+        <div class="rare-modal-sub">This blood type is extremely rare. Provide your contact so our team can coordinate sourcing <span id="rareRequestBloodText"></span> for you.</div>
+      </div>
+      <div class="rare-modal-body">
+        <div class="rare-info-box">
+          <div class="rare-info-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+          <div class="rare-info-text">Sourcing <strong id="rareRequestBloodText2"></strong> may take additional time. Our team will contact you directly to coordinate the request and keep you updated.</div>
+        </div>
+        <div class="rare-form-group">
+          <label class="rare-form-label">Contact Number *</label>
+          <input type="tel" class="rare-input phone" id="rareRequestContact" placeholder="+977 98XXXXXXXX">
+          <span class="rare-field-error" id="rareRequestContactError">Please enter a valid contact number.</span>
+        </div>
+      </div>
+      <div class="rare-modal-footer">
+        <button class="rare-btn-submit" onclick="submitRareContact('request')">Save Contact</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script src="user.js"></script>
+</body>
+</html>
