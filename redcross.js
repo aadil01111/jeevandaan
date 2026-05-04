@@ -1,5 +1,9 @@
 /* ============================================================
+<<<<<<< HEAD
    Life Link – Red Cross Dashboard  |  redcross.js
+=======
+   Life Link – Red Cross Dashboard  |  script.js
+>>>>>>> e35ae448d79a9f7d5ee857b99933db6359243a6d
    ============================================================ */
 
 function showPage(id, el) {
@@ -26,7 +30,11 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+<<<<<<< HEAD
 /* ── Disease Panel (main drawer) ── */
+=======
+/* ── Disease Panel ── */
+>>>>>>> e35ae448d79a9f7d5ee857b99933db6359243a6d
 function toggleDisease(rowId) {
   const d = document.getElementById('drawer-' + rowId);
   const open = d.classList.contains('open');
@@ -34,6 +42,7 @@ function toggleDisease(rowId) {
   if (!open) d.classList.add('open');
 }
 
+<<<<<<< HEAD
 /* ── Infectious Disease Sub-sections (Blood Infection / Other) ── */
 function toggleSubsection(sectionId, toggleEl) {
   const section = document.getElementById(sectionId);
@@ -83,6 +92,8 @@ function escapeHtml(str) {
 }
 
 /* ── Select color update ── */
+=======
+>>>>>>> e35ae448d79a9f7d5ee857b99933db6359243a6d
 function updateSelectColor(sel) {
   if (sel.value === 'pos') {
     sel.style.background = '#fee2e2';
@@ -93,7 +104,10 @@ function updateSelectColor(sel) {
   }
 }
 
+<<<<<<< HEAD
 /* ── Hemoglobin badge ── */
+=======
+>>>>>>> e35ae448d79a9f7d5ee857b99933db6359243a6d
 function updateHbBadge(rowId) {
   const v = parseFloat(document.getElementById('hb-' + rowId).value);
   const b = document.getElementById('hb-badge-' + rowId);
@@ -319,6 +333,7 @@ function viewHistory(donorId) {
     });
   }
   document.getElementById('history-modal').classList.add('open');
+<<<<<<< HEAD
 }
 const rcNotifications = [
   { id:'rc1', type:'urgent',      read:false, time:'5 min ago',   msg:'<strong>CRITICAL:</strong> Rh-null blood request from <strong>Jane Smith</strong> — immediate attention required at Bhaktapur Hospital.' },
@@ -402,3 +417,6 @@ document.addEventListener('DOMContentLoaded',()=>{rcUpdateBadges();});
 
 const _origRcShow=window.showPage;
 window.showPage=function(id,btn){_origRcShow(id,btn);if(id==='rc-notifications')rcRenderPage(_rcPageF);};
+=======
+}
+>>>>>>> e35ae448d79a9f7d5ee857b99933db6359243a6d

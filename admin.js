@@ -145,6 +145,7 @@ function verifyAction(rowId, newStatus) {
   badge.className = 'badge';
   badge.classList.add(newStatus === 'Approved' ? 'badge-active' : 'badge-inactive');
   showToast('Verification ' + newStatus.toLowerCase() + '.');
+<<<<<<< HEAD
 }
 
 const adminNotifications = [
@@ -276,4 +277,6 @@ const _origShowPage = window.showPage;
 window.showPage = function(id, btn) {
   _origShowPage(id, btn);
   if(id==='notifications') renderPageList(_pageFilter);
+=======
+>>>>>>> e35ae448d79a9f7d5ee857b99933db6359243a6d
 }
